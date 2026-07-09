@@ -1,10 +1,10 @@
-import { Link } from "react-router";
+// import { Link } from "react-router";
 
 const Footer = () => {
   return (
     <footer className="bg-[#0A1931] border-t border-[#4A7FA7]">
       <div className="max-w-7xl mx-auto px-6 py-6">
-
+{/* 
       
         <div className="text-center">
           <Link to="/" className="text-4xl font-bold text-white">
@@ -14,10 +14,10 @@ const Footer = () => {
           <p className="mt-2 text-gray-400">
             Validate your startup ideas before you build.
           </p>
-        </div>
+        </div> */}
 
        
-        <div className="my-8 border-t border-[#4A7FA7]/40"></div>
+        {/* <div className="my-8 border-t border-[#4A7FA7]/40"></div> */}
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
 
