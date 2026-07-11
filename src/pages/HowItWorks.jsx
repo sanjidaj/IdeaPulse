@@ -2,7 +2,7 @@
 const HowItWorks = () => {
     return (
         <div>
-             <h1>howw</h1>
+             <h1>How it works</h1>
         </div>
     );
 };

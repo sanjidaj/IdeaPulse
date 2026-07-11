@@ -1,11 +1,15 @@
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router";
+import heroImg from "../../assets/hero-bg.jpg"
 
 
 const Hero = () => {
     return (
-        <section className=" ">
-            <div className=" py-10  flex items-center mt-20">
+        <section
+        className="h-screen  bg-cover bg-center bg-no-repeat " style={{
+                backgroundImage: `url(${heroImg})`,
+              }}>
+            <div className="max-w-6xl  mx-auto  py-10  flex items-center justify-center h-screen">
 
                 <div className="grid grid-cols-2 text-center  items-center  w-full">
 

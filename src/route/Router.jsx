@@ -6,8 +6,10 @@ import LandingPage from '../pages/LandingPage';
 import LandingLayout from '../layout/LandingLayout';
 import RootLayout from '../layout/RootLayout';
 import Homepage from '../pages/Homepage';
-import NotFoundPage from '../pages/NotFoundPage';
 import HowItWorks from '../pages/HowItWorks';
+import NotFoundPage from '../pages/NotFoundPage';
+
+
 
 
 
@@ -19,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <LandingPage/>,
+      },
+      {
+        path: "/how-it-works",
+        element: <HowItWorks/>,
       },
     
       
@@ -44,13 +50,14 @@ export const router = createBrowserRouter([
         path: "/homepage",
         element: <Homepage/>,
       },
-        {
-        path: "/how-it-works",
-        element: <HowItWorks/>,
-      },
+      
       
     ],
-    errorElement: <NotFoundPage/>
+    // errorElement: <NotFoundPage/>
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
   
 ]);
