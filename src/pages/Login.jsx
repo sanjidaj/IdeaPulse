@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import api from "../services/api";
 import LogoText from "../assets/logoText.png"
+import toast from "react-hot-toast";
 // import logoImg from "../assets/logo.png"
 
 
@@ -35,12 +36,13 @@ const Login = () => {
         JSON.stringify(res.data.user)
       );
 
-      alert(res.data.message);
+      toast.success("Login successful!");
 
-      navigate("/dashboard");
+      navigate("/homepage");
 
     } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+      console.log(error);
+      toast.error("Invalid email or password");
     }
   };
 

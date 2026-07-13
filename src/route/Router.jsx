@@ -8,6 +8,10 @@ import RootLayout from '../layout/RootLayout';
 import Homepage from '../pages/Homepage';
 import HowItWorks from '../pages/HowItWorks';
 import NotFoundPage from '../pages/NotFoundPage';
+import Dashboard from '../pages/Dashboard';
+import About from '../pages/About';
+import Features from '../pages/Features';
+
 
 
 
@@ -25,6 +29,14 @@ export const router = createBrowserRouter([
       {
         path: "/how-it-works",
         element: <HowItWorks/>,
+      },
+      {
+        path: "/about",
+        element: <About/>
+      },
+      {
+        path: "/features",
+        element: <Features/>
       },
     
       
@@ -50,6 +62,11 @@ export const router = createBrowserRouter([
         path: "/homepage",
         element: <Homepage/>,
       },
+      {
+        path: "/dashboard",
+        element: <Dashboard/>,
+      },
+
       
       
     ],

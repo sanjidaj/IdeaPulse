@@ -43,11 +43,7 @@ const LandingNavbar = () => {
             
             </Link>
           </li>
-          <li>
-            <Link to="/contact" className="text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
-              Contact
-            </Link>
-          </li>
+          
 
           
         </ul>

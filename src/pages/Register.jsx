@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import api from "../services/api";
 import LogoText from "../assets/logoText.png"
+import toast from "react-hot-toast";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -25,12 +26,13 @@ const Register = () => {
     try {
       const res = await api.post("/auth/register", formData);
 
-      alert(res.data.message);
-
+      console.log(res);
+      toast.success("Registration Successful")
       navigate("/login");
 
     } catch (error) {
-      alert(error.response?.data?.message || "Registration failed");
+      console.log(error);
+      toast.error("Registration Failed");
     }
   };
 

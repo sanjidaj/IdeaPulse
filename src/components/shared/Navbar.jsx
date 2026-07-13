@@ -1,6 +1,9 @@
 import { Link } from "react-router";
 import logoImg from "../../assets/logo.png"
 import LogoText from "../../assets/logoText.png"
+import { IoIosSearch } from "react-icons/io";
+import { FiPlus } from "react-icons/fi";
+import { AiOutlineHome } from "react-icons/ai";
 
 const Navbar = () => {
      return (
@@ -8,7 +11,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-2">
 
         {/* Logo image */}
-        <Link to="/" className="flex items-center">
+        <Link to="/homepage" className="flex items-center">
           <img
             src={logoImg} 
             alt="Logo"
@@ -26,34 +29,30 @@ const Navbar = () => {
         {/* navigation link */}
         <ul className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
           <li>
-            <Link to="features"  className="text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
-               Features
+            <Link to="/homepage"  className=" text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
+               <AiOutlineHome/>Home
             </Link>
           </li>
 
           <li>
-            <Link to="/about"  className="text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
-              About
+            <Link to="/explore"  className="text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
+              <IoIosSearch/>Explore
             </Link>
           </li>
           <li>
-            <Link to="/how-it-works" className="text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
-               How It Works
+            <Link to="/submitidea" className="text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
+               <FiPlus/>Submit idea
             
             </Link>
           </li>
-          <li>
-            <Link to="/contact" className="text-xs hover:text-[#4A7FA7] transition text-[#1A3D63] hover:underline flex items-center gap-1">
-              Contact
-            </Link>
-          </li>
+          
 
           
         </ul>
 
         {/* Buttons */}
-        <div className="flex items-center gap-2">
-                     <label className="input">
+        <div className="flex items-center justify-between gap-4">
+                     <label className="input flex-1">
                          <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                              <g
                                  strokeLinejoin="round"
@@ -71,7 +70,7 @@ const Navbar = () => {
 
           <Link
             to="/"
-            className="bg-[#0A1931] text-white px-5 py-2 rounded-xl font-medium hover:bg-[#4A7FA7] transition shadow-md"
+            className="bg-[#0A1931] shrink-0 text-white px-5 py-2 rounded-xl font-medium hover:bg-[#4A7FA7] transition shadow-md"
           >
             Log Out
           </Link>

@@ -10,8 +10,8 @@ const LandingLayout = () => {
       <LandingNavbar/>
       
      
-      <main className="bg-linear-to-br from-[#B3CFE5] via-[#4A7FA7] to-[#1A3D63]">
-        <div className=" "  >
+      <main className="">
+        <div >
           <Outlet/>
         </div>
       </main>

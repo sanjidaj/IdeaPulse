@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
   res.send("IdeaPulse API Running...");
 });
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
