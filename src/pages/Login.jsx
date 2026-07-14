@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import api from "../services/api";
 import LogoText from "../assets/logoText.png"
@@ -11,6 +11,13 @@ import toast from "react-hot-toast";
 const Login = () => {
 
   const navigate = useNavigate();
+  useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user) {
+    navigate("/homepage");
+  }
+}, [navigate]);
 
   const [formData, setFormData] = useState({
     email: "",

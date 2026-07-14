@@ -1,13 +1,13 @@
 
 import { Outlet } from "react-router";
-import LandingNavbar from "../components/landingPage/LandingNavbar";
 import Footer from "../components/shared/Footer";
+import Navbar from "../components/shared/Navbar";
 // import heroImg from "../assets/hero-bg.jpg"
 
 const LandingLayout = () => {
   return (
     <>
-      <LandingNavbar/>
+      <Navbar/>
       
      
       <main className="">
