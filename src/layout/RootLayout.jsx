@@ -8,7 +8,7 @@ const RootLayout = () => {
     <div className="">
       <Navbar/>
       <main className="bg-linear-to-br from-[#B3CFE5] via-[#4A7FA7] to-[#1A3D63]">
-        <div className="max-w-4xl  mx-auto min-h-screen">
+        <div className="mx-auto min-h-screen">
             <Outlet/>
         </div>
       </main>

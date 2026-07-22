@@ -8,7 +8,7 @@ const About = () => {
           About IdeaPulse
         </h1>
 
-        <div className=" p-10 space-y-6 ">
+        <div className=" p-10 space-y-6 border-2 border-[#4A7FA7] rounded-3xl">
 
           <p className="text-lg leading-8 text-white">
             IdeaPulse is a startup idea validation platform where entrepreneurs, students and innovators can share their ideas and receive valuable feedback before investing time and resources into development.
@@ -23,20 +23,7 @@ const About = () => {
 
           <div className="grid md:grid-cols-3 gap-6 pt-6">
 
-            {/* <div className="text-center">
-              <h2 className="text-4xl font-extrabold text-[#0A1931]">100+</h2>
-              <p className="text-gray-300">Ideas Shared</p>
-            </div>
-
-            <div className="text-center">
-              <h2 className="text-4xl font-extrabold text-[#0A1931]">500+</h2>
-              <p className="text-gray-300">Community Feedback</p>
-            </div>
-
-            <div className="text-center">
-              <h2 className="text-4xl font-extrabold text-[#0A1931]">50+</h2>
-              <p className="text-gray-300">Active Members</p>
-            </div> */}
+           
 
           </div>
 

@@ -27,7 +27,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] bg- text-white py-10 px-6">
+    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] bg- text-white py-10 px-6 ">
 
       <div className="max-w-4xl mx-auto">
 
