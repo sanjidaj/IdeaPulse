@@ -11,6 +11,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import Dashboard from '../pages/Dashboard';
 import About from '../pages/About';
 import Features from '../pages/Features';
+import SubmitIdea from '../pages/SubmitIdea';
 
 
 
@@ -66,6 +67,11 @@ export const router = createBrowserRouter([
         path: "/dashboard",
         element: <Dashboard/>,
       },
+      {
+        path: "/submit-idea",
+        element: <SubmitIdea/>,
+      },
+
 
       
       
