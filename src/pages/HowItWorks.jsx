@@ -27,38 +27,51 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] bg- text-white py-10 px-6 ">
+    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] text-white py-16 px-6">
 
       <div className="max-w-4xl mx-auto">
 
-        <h1 className="text-4xl font-bold text-center mb-4">
-          How It Works
-        </h1>
+        <div className="text-center mb-10">
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#B3CFE5] bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-3">
+            The Process
+          </span>
 
-        <p className="text-center text-gray-300 mb-10">
-          Validate your startup idea in four simple steps.
-        </p>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+            How It Works
+          </h1>
 
-        <div className="grid md:grid-cols-1 gap-4">
+          <p className="text-gray-300 mt-2 text-base sm:text-lg">
+            Validate your startup idea in four simple steps.
+          </p>
+        </div>
 
-          {steps.map((step) => (
-            <div
-              key={step.number}
-              className="bg-white border border-[#B3CFE5] rounded-xl p-4"
-            >
-              <span className="text-xl font-semibold bg-[#0A1931] px-3 py-2 rounded-full">
-                {step.number}
-              </span>
+        <div className="relative">
 
-              <h2 className="text-2xl font-semibold mt-4 mb-3 text-[#0A1931]">
-                {step.title}
-              </h2>
+          {/* Connecting line */}
+          <div className="hidden sm:block absolute left-9.5 top-4 bottom-4 w-px bg-white/15" />
 
-              <p className="text-[#1A3D63] leading-7">
-                {step.description}
-              </p>
-            </div>
-          ))}
+          <div className="space-y-5">
+            {steps.map((step) => (
+              <div
+                key={step.number}
+                className="group relative flex flex-col sm:flex-row gap-5 sm:gap-7 bg-white border border-[#B3CFE5]/60 rounded-2xl p-6 sm:p-7 shadow-lg shadow-black/10 hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+              >
+                <span className="relative z-10 shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl bg-[#0A1931] text-white text-xl font-bold group-hover:bg-[#1A3D63] transition-colors duration-300">
+                  {step.number}
+                </span>
+
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-semibold mb-1.5 text-[#0A1931] tracking-tight">
+                    {step.title}
+                  </h2>
+
+                  <p className="text-[#1A3D63]/80 leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
 
         </div>
 

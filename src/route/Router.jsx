@@ -13,6 +13,7 @@ import About from '../pages/About';
 import Features from '../pages/Features';
 import SubmitIdea from '../pages/SubmitIdea';
 import MyIdeas from '../pages/MyIdeas';
+import PrivateRoute from './PrivateRoute';
 
 
 
@@ -58,7 +59,11 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    element: <RootLayout />,
+    element: (
+      <PrivateRoute>
+        <RootLayout />
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "/homepage",
@@ -78,7 +83,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/my-ideas",
-        element: <MyIdeas/>,
+        element: <MyIdeas />,
       },
 
 

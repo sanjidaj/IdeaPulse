@@ -54,60 +54,74 @@ const Sidebar = () => {
 
     return (
         <aside
-            className={`h-screen bg-white border-r border-gray-200 flex flex-col sticky top-0 transition-all duration-300 ${open ? "w-64" : "w-20"
+            className={`h-screen bg-white border-r border-gray-100 shadow-sm flex flex-col sticky top-0 transition-all duration-300 ${open ? "w-64" : "w-20"
                 }`}
         >
-          
+
             {/* Header */}
-            <div className="flex items-center justify-between p-2">
+            <div className="flex items-center justify-between p-3 border-b border-gray-100">
 
                 {open ? (
                     <>
                         <img
                             src={logoImg}
                             alt="IdeaPulse"
-                            className="h-14"
+                            className="h-12"
                         />
 
                         <button
                             onClick={() => setOpen(false)}
-                            className=" text-[#1A3D63] hover:text-[#4A7FA7] transition px-4"
+                            className="text-[#1A3D63] hover:text-[#4A7FA7] hover:bg-[#F5F9FD] transition-colors duration-200 p-2 rounded-lg"
                         >
-                            <RxCross2 />
+                            <RxCross2 className="text-lg" />
                         </button>
                     </>
                 ) : (
                     <button
                         onClick={() => setOpen(true)}
-                        className="mx-auto text-2xl text-[#1A3D63] hover:text-[#4A7FA7] transition"
+                        className="mx-auto text-2xl text-[#1A3D63] hover:text-[#4A7FA7] hover:bg-[#F5F9FD] transition-colors duration-200 p-2 rounded-lg"
                     >
-                       <HiBars3/>
+                        <HiBars3 />
                     </button>
                 )}
 
             </div>
 
             {/* Menu */}
-            <nav className="flex-1 px-2 py-4 space-y-2">
-                {menuItems.map((item) => (
-                    <Link
-                        key={item.name}
-                        to={item.path}
-                        className={`flex items-center ${open ? "gap-4 px-4 justify-start" : "justify-center"
-                            } py-3 rounded-xl transition-all duration-200 ${location.pathname === item.path
-                                ? "bg-[#EAF3FB] text-[#1A3D63] font-semibold"
-                                : "text-gray-700 hover:bg-[#F5F9FD]"
-                            }`}
-                    >
-                        <span className="text-2xl">{item.icon}</span>
+            <nav className="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto">
+                {menuItems.map((item) => {
+                    const isActive = location.pathname === item.path;
 
-                        {open && (
-                            <span className="text-lg">
-                                {item.name}
+                    return (
+                        <Link
+                            key={item.name}
+                            to={item.path}
+                            title={!open ? item.name : undefined}
+                            className={`group relative flex items-center ${open ? "gap-3.5 px-4 justify-start" : "justify-center"
+                                } py-3 rounded-xl transition-all duration-200 ${isActive
+                                    ? "bg-[#1A3D63] text-white font-semibold shadow-sm"
+                                    : "text-gray-600 hover:bg-[#F5F9FD] hover:text-[#1A3D63]"
+                                }`}
+                        >
+                            {isActive && open && (
+                                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full " />
+                            )}
+
+                            <span
+                                className={`text-xl transition-transform duration-200 ${!isActive && "group-hover:scale-110"
+                                    }`}
+                            >
+                                {item.icon}
                             </span>
-                        )}
-                    </Link>
-                ))}
+
+                            {open && (
+                                <span className="text-[15px] tracking-tight">
+                                    {item.name}
+                                </span>
+                            )}
+                        </Link>
+                    );
+                })}
             </nav>
         </aside>
     );

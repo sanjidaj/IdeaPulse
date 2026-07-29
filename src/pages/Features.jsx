@@ -37,34 +37,47 @@ const features = [
 ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] text-white py-10 px-6">
-      <div className="max-w-4xl mx-auto">
-       
+    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] text-white py-16 px-6">
+      <div className="max-w-5xl mx-auto">
 
-        <h1 className="text-4xl font-bold text-center mb-4">
-          Features
-        </h1>
+        <div className="text-center mb-10">
+          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#B3CFE5] bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-3">
+            Why IdeaPulse
+          </span>
 
-        <p className="text-center text-gray-300 max-w-2xl mx-auto mb-10">
-          Explore the core features designed to turn innovative ideas into successful ventures.
-        </p>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+            Features
+          </h1>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <p className="text-gray-300 max-w-2xl mx-auto mt-4 text-base sm:text-lg leading-relaxed">
+            Explore the core features designed to turn innovative ideas into successful ventures.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-linear-to-br from-[#4A7FA7] via-[#4A7FA7] to-[#1A3D63] border border-[#B3CFE5] shadow rounded-xl p-6 hover:-translate-y-2 transition space-y-2 "
+              className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-[#6FA3C8]/50 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
             >
-            <div className="w-14 h-14 mx-auto rounded-full bg-[#0A1931] flex items-center justify-center  text-[#6FA3C8] text-3xl">
-               {feature.icon}
-             </div>
-              <h2 className="text-xl font-bold text-white mb-3 text-center">
-                {feature.title}
-              </h2>
+              {/* Accent glow on hover */}
+              <div className="absolute -top-10 -right-10 w-24 h-24 rounded-full bg-[#4A7FA7]/0 group-hover:bg-[#4A7FA7]/20 blur-2xl transition-all duration-500" />
 
-              <p className="text-white text-center">
-                {feature.description}
-              </p>
+              <div className="relative flex items-start gap-4">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-linear-to-br from-[#4A7FA7] to-[#1A3D63] flex items-center justify-center text-white text-xl shadow-lg shadow-black/20 group-hover:scale-105 transition-transform duration-300">
+                  {feature.icon}
+                </div>
+
+                <div>
+                  <h2 className="text-lg font-bold text-white mb-1.5 tracking-tight">
+                    {feature.title}
+                  </h2>
+
+                  <p className="text-[#B3CFE5] text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
