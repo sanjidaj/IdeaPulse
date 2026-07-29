@@ -71,6 +71,11 @@ export const router = createBrowserRouter([
         path: "/submit-idea",
         element: <SubmitIdea/>,
       },
+      {
+        path: "/submit-idea",
+        element: <SubmitIdea/>,
+      },
+
 
 
 
