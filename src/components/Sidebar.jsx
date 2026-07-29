@@ -12,9 +12,11 @@ import { Link, useLocation } from "react-router";
 import logoImg from "../assets/logo.png";
 import { RxCross2 } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
+import { useState } from "react";
 
 
-const Sidebar = ({ open, setOpen }) => {
+const Sidebar = () => {
+    const [open, setOpen] = useState(true);
     const location = useLocation();
 
     const menuItems = [

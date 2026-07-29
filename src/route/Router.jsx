@@ -12,6 +12,7 @@ import Dashboard from '../pages/Dashboard';
 import About from '../pages/About';
 import Features from '../pages/Features';
 import SubmitIdea from '../pages/SubmitIdea';
+import MyIdeas from '../pages/MyIdeas';
 
 
 
@@ -69,12 +70,18 @@ export const router = createBrowserRouter([
       },
       {
         path: "/submit-idea",
-        element: <SubmitIdea/>,
+        element: <SubmitIdea />,
       },
       {
         path: "/submit-idea",
-        element: <SubmitIdea/>,
+        element: <SubmitIdea />,
       },
+      {
+        path: "/my-ideas",
+        element: <MyIdeas/>,
+      },
+
+
 
 
 

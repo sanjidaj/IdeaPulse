@@ -34,3 +34,23 @@ export const getIdeas = async (req, res) => {
     });
   }
 };
+
+export const getMyIdeas = async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    const ideas = await Idea.find({
+      createdBy: username,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      ideas,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

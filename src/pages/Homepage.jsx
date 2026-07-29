@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import api from "../services/api";
-import Sidebar from "../components/Sidebar";
 import IdeaCard from "../components/IdeaCard";
 
 const Homepage = () => {
   const [ideas, setIdeas] = useState([]);
-  const [open, setOpen] = useState(true);
+
 
   const navigate = useNavigate();
 
@@ -24,9 +23,8 @@ const Homepage = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#F5F7FA]">
-      {/* Sidebar */}
-      <Sidebar open={open} setOpen={setOpen} />
+    <div className="min-h-screen mx-auto p-8">
+
 
       {/* Main Content */}
       <div className="flex-1 p-8">
@@ -52,7 +50,10 @@ const Homepage = () => {
           {/* Feed */}
           {ideas.length > 0 ? (
             ideas.map((idea) => (
-              <IdeaCard key={idea._id} idea={idea} />
+              <IdeaCard
+                key={idea._id}
+                idea={idea}
+              />
             ))
           ) : (
             <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
