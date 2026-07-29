@@ -11,6 +11,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import Dashboard from '../pages/Dashboard';
 import About from '../pages/About';
 import Features from '../pages/Features';
+import SubmitIdea from '../pages/SubmitIdea';
 
 
 
@@ -20,61 +21,65 @@ import Features from '../pages/Features';
 
 export const router = createBrowserRouter([
   {
-    element: <LandingLayout/>,
+    element: <LandingLayout />,
     children: [
       {
         path: "/",
-        element: <LandingPage/>,
+        element: <LandingPage />,
       },
       {
         path: "/how-it-works",
-        element: <HowItWorks/>,
+        element: <HowItWorks />,
       },
       {
         path: "/about",
-        element: <About/>
+        element: <About />
       },
       {
         path: "/features",
-        element: <Features/>
+        element: <Features />
       },
-    
-      
+
+
     ],
   },
   {
-    element: <AuthLayout/>,
+    element: <AuthLayout />,
     children: [
       {
         path: "/login",
-        element: <Login/>,
+        element: <Login />,
       },
       {
         path: "/register",
-        element: <Register/>,
+        element: <Register />,
       },
     ],
   },
   {
-    element: <RootLayout/>,
+    element: <RootLayout />,
     children: [
       {
         path: "/homepage",
-        element: <Homepage/>,
+        element: <Homepage />,
       },
       {
         path: "/dashboard",
-        element: <Dashboard/>,
+        element: <Dashboard />,
+      },
+      {
+        path: "/submit-idea",
+        element: <SubmitIdea/>,
       },
 
-      
-      
+
+
     ],
-    
+
   },
   {
     path: "*",
     element: <NotFoundPage />,
   },
-  
+
 ]);

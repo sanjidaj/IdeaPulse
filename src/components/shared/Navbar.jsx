@@ -139,7 +139,7 @@ const Navbar = () => {
                                         <li>
                                             <button
                                                 onClick={handleLogout}
-                                                className="flex items-center gap-2"
+                                                className="flex items-center gap-2 text-red-600"
                                             >
                                                 <FaSignOutAlt />
                                                 Logout

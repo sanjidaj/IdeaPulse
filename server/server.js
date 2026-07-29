@@ -5,6 +5,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 
 import connectDB from "./config/db.js";
+import ideaRoutes from "./routes/ideaRoutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cors());
 
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use("/api/ideas", ideaRoutes);
 
 app.get("/", (req, res) => {
   res.send("IdeaPulse API Running...");
