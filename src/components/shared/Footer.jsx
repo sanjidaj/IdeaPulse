@@ -1,46 +1,41 @@
-// import { Link } from "react-router";
-
 const Footer = () => {
   return (
-    <footer className="bg-[#0A1931] border-t border-[#4A7FA7]">
-      <div className="max-w-7xl mx-auto px-6 py-6">
-{/* 
-      
-        <div className="text-center">
-          <Link to="/" className="text-4xl font-bold text-white">
-            IdeaPulse
-          </Link>
+    <footer className="relative overflow-hidden bg-[#0A1931] border-t border-[#4A7FA7]/20">
+  
+      <div className="absolute -top-16 left-1/2 -translate-x-1/2 h-40 w-96 rounded-full bg-[#4A7FA7]/10 blur-3xl"></div>
 
-          <p className="mt-2 text-gray-400">
-            Validate your startup ideas before you build.
-          </p>
-        </div> */}
-
+      <div className="relative max-w-7xl mx-auto px-6 py-8">
        
-        {/* <div className="my-8 border-t border-[#4A7FA7]/40"></div> */}
 
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-5">
+        
           <p className="text-sm text-gray-400 text-center">
             © 2026 IdeaPulse. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
-            <a href="#" className="hover:text-white transition-colors">
+          <div className="flex flex-wrap justify-center gap-8">
+            <a
+              href="#"
+              className="relative text-sm text-gray-400 transition-all duration-300 hover:text-[#4A7FA7] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#4A7FA7] after:transition-all after:duration-300 hover:after:w-full"
+            >
               Privacy Policy
             </a>
 
-            <a href="#" className="hover:text-white transition-colors">
+            <a
+              href="#"
+              className="relative text-sm text-gray-400 transition-all duration-300 hover:text-[#4A7FA7] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#4A7FA7] after:transition-all after:duration-300 hover:after:w-full"
+            >
               Terms of Service
             </a>
 
-            <a href="#" className="hover:text-white transition-colors">
+            <a
+              href="#"
+              className="relative text-sm text-gray-400 transition-all duration-300 hover:text-[#4A7FA7] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#4A7FA7] after:transition-all after:duration-300 hover:after:w-full"
+            >
               Cookies
             </a>
           </div>
-
         </div>
-
       </div>
     </footer>
   );
