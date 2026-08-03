@@ -37,7 +37,7 @@ const features = [
 ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] text-white py-16 px-6">
+    <div className="min-h-screen bg-linear-to-br from-[#0B1F33] via-[#132C47] to-[#1A3D63] text-white py-16 px-6">
       <div className="max-w-5xl mx-auto">
 
         <div className="text-center mb-10">

@@ -23,6 +23,34 @@ const MyIdeas = () => {
         fetchMyIdeas();
     }, [user.name]);
 
+    const handleEdit = (idea) => {
+        navigate("/submit-idea", {
+            state: {
+                editIdea: idea,
+            },
+        });
+    };
+
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm(
+            "Delete this idea?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            await api.delete(`/ideas/${id}`);
+
+            setIdeas((prev) =>
+                prev.filter((idea) => idea._id !== id)
+            );
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     return (
         <div className="p-4 sm:p-6 lg:p-8 bg-[#F5F7FA] min-h-screen">
             <div className="max-w-4xl mx-auto">
@@ -43,7 +71,7 @@ const MyIdeas = () => {
                             onClick={() => navigate("/submit-idea")}
                             className="hidden sm:inline-flex bg-[#1A3D63] text-white font-medium px-5 py-2.5 rounded-xl shadow-sm hover:bg-[#4A7FA7] hover:shadow-md active:scale-95 transition-all duration-200 flex items-center gap-3"
                         >
-                            <FaPlus/> New Idea
+                            <FaPlus /> New Idea
                         </button>
                     )}
                 </div>
@@ -74,7 +102,13 @@ const MyIdeas = () => {
                                 key={idea._id}
                                 className="transition-transform duration-200 hover:-translate-y-0.5"
                             >
-                                <IdeaCard idea={idea} showActions={true} />
+                                <IdeaCard
+                                    key={idea._id}
+                                    idea={idea}
+                                    showActions={true}
+                                    onDelete={handleDelete}
+                                    onEdit={handleEdit}
+                                />
                             </div>
                         ))}
                     </div>

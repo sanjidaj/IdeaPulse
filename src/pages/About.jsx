@@ -3,7 +3,7 @@ const About = () => {
 
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#1A3D63] to-[#0A1931] text-white py-16 px-6">
+    <div className="min-h-screen bg-linear-to-br from-[#0B1F33] via-[#132C47] to-[#1A3D63] text-white py-16 px-6">
 
       <div className="max-w-5xl mx-auto">
 
@@ -20,7 +20,7 @@ const About = () => {
        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl">
 
           {/* Top Accent */}
-          <div className="h-1 w-full bg-gradient-to-r from-[#1A3D63] via-[#4A7FA7] to-[#1A3D63]"></div>
+          <div className="h-1 w-full bg-linear-to-r from-[#1A3D63] via-[#4A7FA7] to-[#1A3D63]"></div>
 
           <div className="p-8 md:p-12 lg:p-14 space-y-8">
 

@@ -1,19 +1,22 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import api from "../services/api";
 import toast from "react-hot-toast";
 
 const SubmitIdea = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const editIdea = location.state?.editIdea;
+
   const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    description: "",
-    problem: "",
-    solution: "",
+    title: editIdea?.title || "",
+    category: editIdea?.category || "",
+    description: editIdea?.description || "",
+    problem: editIdea?.problem || "",
+    solution: editIdea?.solution || "",
   });
 
   const handleChange = (e) => {
@@ -27,21 +30,32 @@ const SubmitIdea = () => {
     e.preventDefault();
 
     try {
-      const newIdea = {
-        ...formData,
-        createdBy: user.name,
-      };
+      if (editIdea) {
+        // Update existing idea
+        await api.put(`/ideas/${editIdea._id}`, formData);
 
-      await api.post("/ideas", newIdea);
+        toast.success("Idea updated successfully!");
+      } else {
+        // Create new idea
+        const newIdea = {
+          ...formData,
+          createdBy: user.name,
+        };
 
-      toast.success("Idea submitted successfully!");
+        await api.post("/ideas", newIdea);
 
-      navigate("/homepage");
+        toast.success("Idea submitted successfully!");
+      }
+
+      navigate("/my-ideas");
     } catch (error) {
       console.log(error);
-      toast.error("Failed to submit idea");
+      toast.error(
+        editIdea ? "Failed to update idea" : "Failed to submit idea"
+      );
     }
   };
+
 
   const inputClass =
     "w-full border border-gray-200 rounded-xl p-3.5 text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4A7FA7]/40 focus:border-[#4A7FA7] transition-all duration-200";

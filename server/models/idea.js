@@ -32,10 +32,32 @@ const ideaSchema = new mongoose.Schema(
       required: true,
     },
 
-    likes: {
+    upvotes: {
       type: Number,
       default: 0,
     },
+
+    downvotes: {
+      type: Number,
+      default: 0,
+    },
+
+    comments: [
+      {
+        user: String,
+        text: String,
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
+    savedBy: [
+      {
+        type: String, // user's email or id
+      },
+    ],
   },
   {
     timestamps: true,
