@@ -20,7 +20,7 @@ router.post("/", createIdea);
 router.get("/", getIdeas);
 
 // Get only the logged-in user's ideas
-router.get("/my/:username", getMyIdeas);
+router.get("/my-ideas/:id", getMyIdeas);
 router.put("/:id/like", likeIdea);
 router.put("/:id/dislike", dislikeIdea);
 router.put("/:id/save", saveIdea);

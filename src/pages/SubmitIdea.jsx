@@ -39,6 +39,7 @@ const SubmitIdea = () => {
         // Create new idea
         const newIdea = {
           ...formData,
+          userId: user.id,
           createdBy: user.name,
         };
 

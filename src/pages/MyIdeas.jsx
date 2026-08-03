@@ -13,7 +13,7 @@ const MyIdeas = () => {
     useEffect(() => {
         const fetchMyIdeas = async () => {
             try {
-                const res = await api.get(`/ideas/my/${user.name}`);
+                const res = await api.get(`/ideas/my-ideas/${user.id}`);
                 setIdeas(res.data.ideas);
             } catch (error) {
                 console.log(error);

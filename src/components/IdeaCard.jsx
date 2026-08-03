@@ -217,7 +217,7 @@ const IdeaCard = ({
 
                 ) : (
 
-                    // Homepage / Explore
+                    // Homepage 
                     <div className="flex justify-between items-center">
 
                         {/* Like */}

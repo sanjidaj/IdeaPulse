@@ -15,6 +15,7 @@ import SubmitIdea from '../pages/SubmitIdea';
 import MyIdeas from '../pages/MyIdeas';
 import PrivateRoute from './PrivateRoute';
 import ExploreIdeas from '../pages/ExploreIdeas';
+import Profile from '../pages/Profile';
 
 
 
@@ -84,7 +85,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/explore",
-        element: <ExploreIdeas/>,
+        element: <ExploreIdeas />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
 
 
