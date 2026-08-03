@@ -47,6 +47,16 @@ const ideaSchema = new mongoose.Schema(
       default: 0,
     },
 
+    likedBy: {
+      type: [String], // store user emails
+      default: [],
+    },
+
+    dislikedBy: {
+      type: [String],
+      default: [],
+    },
+
     comments: [
       {
         user: String,

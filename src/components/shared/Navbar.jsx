@@ -7,6 +7,7 @@ import {
   FaSignOutAlt,
   FaUserCircle,
 } from "react-icons/fa";
+import { useState } from "react";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -17,6 +18,16 @@ const Navbar = () => {
     localStorage.removeItem("user");
     navigate("/");
     window.location.reload();
+  };
+
+  const [keyword, setKeyword] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    if (!keyword.trim()) return;
+
+    navigate(`/search?keyword=${keyword}`);
   };
 
   return (
@@ -91,20 +102,24 @@ const Navbar = () => {
           {user ? (
             <>
               {/* Search */}
-              <div className="relative">
-                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A7FA7]" />
+              <form onSubmit={handleSearch}>
+                <div className="relative">
+                  <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A7FA7]" />
 
-                <input
-                  type="text"
-                  placeholder="Search ideas..."
-                  className="w-72 rounded-full border border-gray-200 bg-[#F8FBFD]
-                  pl-11 pr-5 py-2.5 text-sm
-                  outline-none transition-all duration-300
+                  <input
+                    type="text"
+                    placeholder="Search ideas..."
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    className="w-72 rounded-full border border-gray-200 bg-[#F8FBFD]
+                    pl-11 pr-5 py-2.5 text-sm
+                    outline-none transition-all duration-300
                   focus:border-[#4A7FA7]
-                  focus:ring-4 focus:ring-[#4A7FA7]/20"
-                />
-              </div>
-                            {/* User Dropdown */}
+                    focus:ring-4 focus:ring-[#4A7FA7]/20"
+                  />
+                </div>
+              </form>
+              {/* User Dropdown */}
               <div className="dropdown dropdown-end">
                 <div
                   tabIndex={0}
@@ -147,7 +162,7 @@ const Navbar = () => {
                         to="/profile"
                         className="flex items-center gap-3 rounded-xl"
                       >
-                        <FaUserCircle/>
+                        <FaUserCircle />
                         Profile
                       </Link>
                     </li>
@@ -157,7 +172,7 @@ const Navbar = () => {
                         to="/profile"
                         className="flex items-center gap-3 rounded-xl"
                       >
-                        <FaCog/>
+                        <FaCog />
                         Settings
                       </Link>
                     </li>
@@ -178,7 +193,7 @@ const Navbar = () => {
 
             </>
           ) : (
-                        <>
+            <>
               {/* Login */}
               <Link
                 to="/login"

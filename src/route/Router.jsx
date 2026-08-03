@@ -16,6 +16,8 @@ import MyIdeas from '../pages/MyIdeas';
 import PrivateRoute from './PrivateRoute';
 import ExploreIdeas from '../pages/ExploreIdeas';
 import Profile from '../pages/Profile';
+import SavedIdeas from '../pages/SavedIdeas';
+import SearchResults from '../pages/SearchResults';
 
 
 
@@ -90,6 +92,14 @@ export const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/saved-ideas",
+        element: <SavedIdeas />,
+      },
+      {
+        path: "/search",
+        element: <SearchResults />,
       },
 
 

@@ -3,6 +3,7 @@ import api from "../services/api";
 import IdeaCard from "../components/IdeaCard";
 import { useNavigate } from "react-router";
 import { FaPlus } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const MyIdeas = () => {
     const [ideas, setIdeas] = useState([]);
@@ -31,24 +32,46 @@ const MyIdeas = () => {
         });
     };
 
-    const handleDelete = async (id) => {
-        const confirmDelete = window.confirm(
-            "Delete this idea?"
-        );
+   const handleDelete = async (id) => {
+  const result = await Swal.fire({
+    title: "Delete this idea?",
+    text: "This action cannot be undone.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#1A3D63",
+    confirmButtonText: "Yes, delete it",
+    cancelButtonText: "Cancel",
+    reverseButtons: true,
+  });
 
-        if (!confirmDelete) return;
+  if (!result.isConfirmed) return;
 
-        try {
-            await api.delete(`/ideas/${id}`);
+  try {
+    await api.delete(`/ideas/${id}`);
 
-            setIdeas((prev) =>
-                prev.filter((idea) => idea._id !== id)
-            );
+    setIdeas((prev) =>
+      prev.filter((idea) => idea._id !== id)
+    );
 
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    Swal.fire({
+      icon: "success",
+      title: "Deleted!",
+      text: "Your idea has been deleted successfully.",
+      timer: 1800,
+      showConfirmButton: false,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Oops!",
+      text: "Failed to delete the idea.",
+    });
+  }
+};
 
 
     return (

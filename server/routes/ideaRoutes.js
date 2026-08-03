@@ -6,8 +6,10 @@ import {
   dislikeIdea,
   getIdeas,
   getMyIdeas,
+  getSavedIdeas,
   likeIdea,
   saveIdea,
+  searchIdeas,
   updateIdea,
 } from "../controllers/ideaController.js";
 
@@ -29,5 +31,7 @@ router.post("/:id/comment", addComment);
 router.delete("/:id", deleteIdea);
 
 router.put("/:id", updateIdea);
+router.get("/saved/:email", getSavedIdeas);
+router.get("/search", searchIdeas);
 
 export default router;

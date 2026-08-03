@@ -37,7 +37,7 @@ export const getIdeas = async (req, res) => {
 
 export const getMyIdeas = async (req, res) => {
   try {
-const { id } = req.params;
+    const { id } = req.params;
 
     const ideas = await Idea.find({
       userId: id,
@@ -56,16 +56,44 @@ const { id } = req.params;
 };
 export const likeIdea = async (req, res) => {
   try {
+    const { email } = req.body;
+
     const idea = await Idea.findById(req.params.id);
 
-    idea.upvotes += 1;
+    if (!idea) {
+      return res.status(404).json({
+        success: false,
+        message: "Idea not found",
+      });
+    }
+
+    const liked = idea.likedBy.includes(email);
+    const disliked = idea.dislikedBy.includes(email);
+
+    if (liked) {
+      // Remove like
+      idea.likedBy = idea.likedBy.filter(
+        (item) => item !== email
+      );
+    } else {
+      // Add like
+      idea.likedBy.push(email);
+
+      // Remove dislike if it exists
+      if (disliked) {
+        idea.dislikedBy = idea.dislikedBy.filter(
+          (item) => item !== email
+        );
+      }
+    }
 
     await idea.save();
 
     res.json({
       success: true,
-      upvotes: idea.upvotes,
+      idea,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -75,16 +103,44 @@ export const likeIdea = async (req, res) => {
 };
 export const dislikeIdea = async (req, res) => {
   try {
+    const { email } = req.body;
+
     const idea = await Idea.findById(req.params.id);
 
-    idea.downvotes += 1;
+    if (!idea) {
+      return res.status(404).json({
+        success: false,
+        message: "Idea not found",
+      });
+    }
+
+    const liked = idea.likedBy.includes(email);
+    const disliked = idea.dislikedBy.includes(email);
+
+    if (disliked) {
+      // Remove dislike
+      idea.dislikedBy = idea.dislikedBy.filter(
+        (item) => item !== email
+      );
+    } else {
+      // Add dislike
+      idea.dislikedBy.push(email);
+
+      // Remove like if it exists
+      if (liked) {
+        idea.likedBy = idea.likedBy.filter(
+          (item) => item !== email
+        );
+      }
+    }
 
     await idea.save();
 
     res.json({
       success: true,
-      downvotes: idea.downvotes,
+      idea,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -200,4 +256,49 @@ export const updateIdea = async (req, res) => {
 
   }
 
+};
+export const getSavedIdeas = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const ideas = await Idea.find({
+      savedBy: email,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      ideas,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const searchIdeas = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+
+    const ideas = await Idea.find({
+      $or: [
+        { title: { $regex: keyword, $options: "i" } },
+        { category: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+        { problem: { $regex: keyword, $options: "i" } },
+        { solution: { $regex: keyword, $options: "i" } },
+        { createdBy: { $regex: keyword, $options: "i" } },
+      ],
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      ideas,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
