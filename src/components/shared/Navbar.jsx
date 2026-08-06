@@ -169,7 +169,7 @@ const Navbar = () => {
 
                     <li className="rounded-xl transition-all duration-300 hover:bg-[#EEF6FC]">
                       <Link
-                        to="/profile"
+                        to="/settings"
                         className="flex items-center gap-3 rounded-xl"
                       >
                         <FaCog />

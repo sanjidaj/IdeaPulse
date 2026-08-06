@@ -92,3 +92,57 @@ export const updateProfile = async (req, res) => {
     }
 
 };
+
+
+
+export const deleteAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find user
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Delete all ideas created by the user
+    await Idea.deleteMany({
+      userId: id,
+    });
+
+    // Remove this user's likes, saves, dislikes and comments
+    await Idea.updateMany(
+      {},
+      {
+        $pull: {
+          likedBy: user.email,
+          dislikedBy: user.email,
+          savedBy: user.email,
+          comments: {
+            email: user.email,
+          },
+        },
+      }
+    );
+
+    // Delete user
+    await User.findByIdAndDelete(id);
+
+    res.json({
+      success: true,
+      message: "Account deleted successfully",
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};

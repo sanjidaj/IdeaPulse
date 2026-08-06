@@ -18,6 +18,7 @@ import ExploreIdeas from '../pages/ExploreIdeas';
 import Profile from '../pages/Profile';
 import SavedIdeas from '../pages/SavedIdeas';
 import SearchResults from '../pages/SearchResults';
+import Settings from '../pages/Settings';
 
 
 
@@ -101,6 +102,10 @@ export const router = createBrowserRouter([
         path: "/search",
         element: <SearchResults />,
       },
+      {
+        path: "/settings",
+        element: <Settings />,
+      }
 
 
 
