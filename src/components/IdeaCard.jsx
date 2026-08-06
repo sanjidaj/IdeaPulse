@@ -157,8 +157,8 @@ const IdeaCard = ({
                 {/* Problem */}
                 <div className="group rounded-2xl border border-[#D8EAF6] bg-[#F7FBFE] p-5 hover:border-[#B9D9EE] hover:shadow-md hover:shadow-[#4A7FA7]/10 transition-all duration-300">
                     <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 shrink-0 rounded-xl bg-[#DDEEF9] flex items-center justify-center group-hover:bg-[#1A3D63] transition-colors duration-300">
-                            <FaExclamationTriangle className="text-[#4A7FA7] group-hover:text-white text-base transition-colors duration-300" />
+                        <div className="w-10 h-10 shrink-0 rounded-xl bg-[#DDEEF9] flex items-center justify-center transition-colors duration-300">
+                            <FaExclamationTriangle className="text-[#4A7FA7] " />
                         </div>
 
                         <div>
@@ -179,8 +179,8 @@ const IdeaCard = ({
                 {/* Solution */}
                 <div className="group rounded-2xl border border-[#D8EAF6] bg-[#F7FBFE] p-5 hover:border-[#B9D9EE] hover:shadow-md hover:shadow-[#4A7FA7]/10 transition-all duration-300">
                     <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 shrink-0 rounded-xl bg-[#DDEEF9] flex items-center justify-center group-hover:bg-[#1A3D63] transition-colors duration-300">
-                            <FaLightbulb className="text-[#4A7FA7] group-hover:text-white text-base transition-colors duration-300" />
+                        <div className="w-10 h-10 shrink-0 rounded-xl bg-[#DDEEF9] flex items-center justify-center  transition-colors duration-300">
+                            <FaLightbulb className="text-[#4A7FA7] " />
                         </div>
 
                         <div>
