@@ -2,17 +2,20 @@ import { Link, useNavigate } from "react-router";
 import logoImg from "../../assets/logo.png";
 import LogoText from "../../assets/logoText.png";
 import {
+  FaBell,
   FaCog,
   FaSearch,
   FaSignOutAlt,
   FaUserCircle,
 } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
+
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -28,6 +31,55 @@ const Navbar = () => {
     if (!keyword.trim()) return;
 
     navigate(`/search?keyword=${keyword}`);
+  };
+  const [notifications, setNotifications] = useState([]);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const res = await api.get(
+          `/notifications/${user.id}`
+        );
+
+        setNotifications(res.data.notifications);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (user?.id) {
+      fetchNotifications();
+    }
+  }, [user?.id]);
+  const unreadCount = notifications.filter(
+    (notification) => !notification.read
+  ).length;
+
+  const handleOpenNotifications = async () => {
+    try {
+      const unreadNotifications = notifications.filter(
+        (notification) => !notification.read
+      );
+
+      // Mark unread notifications as read in database
+      await Promise.all(
+        unreadNotifications.map((notification) =>
+          api.put(`/notifications/${notification._id}/read`)
+        )
+      );
+
+      // Immediately remove badge from Navbar
+      setNotifications((prev) =>
+        prev.map((notification) => ({
+          ...notification,
+          read: true,
+        }))
+      );
+
+      navigate("/notifications");
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -101,6 +153,18 @@ const Navbar = () => {
 
           {user ? (
             <>
+              <button
+                onClick={handleOpenNotifications}
+                className="relative p-2.5 rounded-full text-[#1A3D63] hover:bg-[#EAF3FB] transition"
+              >
+                <FaBell size={18} />
+
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </button>
               {/* Search */}
               <form onSubmit={handleSearch}>
                 <div className="relative">

@@ -19,8 +19,9 @@ import Profile from '../pages/Profile';
 import SavedIdeas from '../pages/SavedIdeas';
 import SearchResults from '../pages/SearchResults';
 import Settings from '../pages/Settings';
+import Notifications from '../pages/Notifications';
 
-
+import IdeaDetails from "../pages/IdeaDetails";
 
 
 
@@ -105,6 +106,14 @@ export const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings />,
+      },
+      {
+        path: "/notifications",
+        element: <Notifications />,
+      },
+      {
+        path: "/idea/:id",
+        element: <IdeaDetails />,
       }
 
 

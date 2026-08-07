@@ -1,4 +1,6 @@
 import Idea from "../models/idea.js";
+import User from "../models/User.js";
+import Notification from "../models/Notification.js";
 
 // Create a new idea
 export const createIdea = async (req, res) => {
@@ -85,6 +87,23 @@ export const likeIdea = async (req, res) => {
           (item) => item !== email
         );
       }
+
+      // 🔔 Create notification
+      const sender = await User.findOne({ email });
+
+      if (
+        sender &&
+        idea.userId &&
+        sender._id.toString() !== idea.userId.toString()
+      ) {
+        await Notification.create({
+          recipient: idea.userId,
+          sender: sender._id,
+          ideaId: idea._id,
+          type: "like",
+          message: `${sender.name} liked your idea`,
+        });
+      }
     }
 
     await idea.save();
@@ -154,6 +173,13 @@ export const saveIdea = async (req, res) => {
 
     const idea = await Idea.findById(req.params.id);
 
+    if (!idea) {
+      return res.status(404).json({
+        success: false,
+        message: "Idea not found",
+      });
+    }
+
     const index = idea.savedBy.indexOf(email);
 
     let saved;
@@ -162,6 +188,24 @@ export const saveIdea = async (req, res) => {
       // Save
       idea.savedBy.push(email);
       saved = true;
+
+      // 🔔 Create notification
+      const sender = await User.findOne({ email });
+
+      if (
+        sender &&
+        idea.userId &&
+        sender._id.toString() !== idea.userId.toString()
+      ) {
+        await Notification.create({
+          recipient: idea.userId,
+          sender: sender._id,
+          ideaId: idea._id,
+          type: "save",
+          message: `${sender.name} saved your idea`,
+        });
+      }
+
     } else {
       // Unsave
       idea.savedBy.splice(index, 1);
@@ -174,6 +218,7 @@ export const saveIdea = async (req, res) => {
       success: true,
       saved,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -187,6 +232,13 @@ export const addComment = async (req, res) => {
 
     const idea = await Idea.findById(req.params.id);
 
+    if (!idea) {
+      return res.status(404).json({
+        success: false,
+        message: "Idea not found",
+      });
+    }
+
     idea.comments.push({
       user,
       text,
@@ -194,10 +246,29 @@ export const addComment = async (req, res) => {
 
     await idea.save();
 
+    // 🔔 Find commenter
+    const sender = await User.findOne({ name: user });
+
+    // 🔔 Create notification
+    if (
+      sender &&
+      idea.userId &&
+      sender._id.toString() !== idea.userId.toString()
+    ) {
+      await Notification.create({
+        recipient: idea.userId,
+        sender: sender._id,
+        ideaId: idea._id,
+        type: "comment",
+        message: `${sender.name} commented on your idea`,
+      });
+    }
+
     res.json({
       success: true,
       comments: idea.comments,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -294,6 +365,28 @@ export const searchIdeas = async (req, res) => {
     res.status(200).json({
       success: true,
       ideas,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const getIdeaById = async (req, res) => {
+  try {
+    const idea = await Idea.findById(req.params.id);
+
+    if (!idea) {
+      return res.status(404).json({
+        success: false,
+        message: "Idea not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      idea,
     });
   } catch (error) {
     res.status(500).json({

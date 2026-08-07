@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
     FaUser,
     FaLock,
-    FaEnvelope,
     FaBell,
     FaShieldAlt,
     FaInfoCircle,
@@ -118,16 +117,7 @@ const Settings = () => {
                         <FaChevronRight />
                     </button>
 
-                    <button
-                        onClick={() => navigate("/profile")}
-                        className="w-full flex justify-between items-center p-4 rounded-xl hover:bg-gray-50 transition"
-                    >
-                        <div className="flex items-center gap-3">
-                            <FaEnvelope />
-                            Change Email
-                        </div>
-                        <FaChevronRight />
-                    </button>
+                    
                 </div>
 
                 {/* Notifications */}

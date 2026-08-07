@@ -19,6 +19,7 @@ const IdeaCard = ({
     showActions = false,
     onDelete,
     onEdit,
+    openComments = false,
 }) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -33,15 +34,14 @@ const IdeaCard = ({
     const liked = likedBy.includes(user.email);
     const disliked = dislikedBy.includes(user.email);
 
- 
-    
+
+
 
     const [saved, setSaved] = useState(
         idea.savedBy?.includes(user?.email) || false
     );
 
-    const [showComments, setShowComments] = useState(false);
-
+    const [showComments, setShowComments] = useState(openComments);
     const [comment, setComment] = useState("");
 
     const [comments, setComments] = useState(
@@ -259,8 +259,8 @@ const IdeaCard = ({
                                 ) : (
                                     <BiDislike size={18} />
                                 )}
-                                <span>{dislikedBy.length}</span>                           
-                             </button>
+                                <span>{dislikedBy.length}</span>
+                            </button>
                         </div>
 
                         <div className="flex items-center gap-1">

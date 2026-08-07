@@ -4,14 +4,17 @@ import {
   createIdea,
   deleteIdea,
   dislikeIdea,
+  getIdeaById,
   getIdeas,
   getMyIdeas,
   getSavedIdeas,
   likeIdea,
   saveIdea,
   searchIdeas,
+ 
   updateIdea,
 } from "../controllers/ideaController.js";
+
 
 const router = express.Router();
 
@@ -33,5 +36,9 @@ router.delete("/:id", deleteIdea);
 router.put("/:id", updateIdea);
 router.get("/saved/:email", getSavedIdeas);
 router.get("/search", searchIdeas);
+
+router.get("/:id", getIdeaById);
+
+
 
 export default router;

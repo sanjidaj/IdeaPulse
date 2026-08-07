@@ -8,7 +8,7 @@ import connectDB from "./config/db.js";
 import ideaRoutes from "./routes/ideaRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js"
-
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 dotenv.config();
 
@@ -24,10 +24,12 @@ app.use("/api/ideas", ideaRoutes);
 
 app.use("/api/users",userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
   res.send("IdeaPulse API Running...");
 });
+
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 5000;
