@@ -62,7 +62,8 @@ const SubmitIdea = () => {
     "w-full border border-gray-200 rounded-xl p-3.5 text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4A7FA7]/40 focus:border-[#4A7FA7] transition-all duration-200";
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] flex justify-center px-4 py-10 sm:py-14">
+
+    <div className="min-h-screen bg-[#F5F7FA] mx-auto flex justify-center px-4 py-10 sm:py-14">
       <form
         onSubmit={handleSubmit}
         className="bg-white w-full max-w-3xl rounded-2xl shadow-md border border-gray-100 p-6 sm:p-10 space-y-6"

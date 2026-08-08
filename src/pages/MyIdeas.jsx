@@ -32,55 +32,55 @@ const MyIdeas = () => {
         });
     };
 
-   const handleDelete = async (id) => {
-  const result = await Swal.fire({
-    title: "Delete this idea?",
-    text: "This action cannot be undone.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#1A3D63",
-    confirmButtonText: "Yes, delete it",
-    cancelButtonText: "Cancel",
-    reverseButtons: true,
-  });
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: "Delete this idea?",
+            text: "This action cannot be undone.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#1A3D63",
+            confirmButtonText: "Yes, delete it",
+            cancelButtonText: "Cancel",
+            reverseButtons: true,
+        });
 
-  if (!result.isConfirmed) return;
+        if (!result.isConfirmed) return;
 
-  try {
-    await api.delete(`/ideas/${id}`);
+        try {
+            await api.delete(`/ideas/${id}`);
 
-    setIdeas((prev) =>
-      prev.filter((idea) => idea._id !== id)
-    );
+            setIdeas((prev) =>
+                prev.filter((idea) => idea._id !== id)
+            );
 
-    Swal.fire({
-      icon: "success",
-      title: "Deleted!",
-      text: "Your idea has been deleted successfully.",
-      timer: 1800,
-      showConfirmButton: false,
-    });
+            Swal.fire({
+                icon: "success",
+                title: "Deleted!",
+                text: "Your idea has been deleted successfully.",
+                timer: 1800,
+                showConfirmButton: false,
+            });
 
-  } catch (error) {
-    console.log(error);
+        } catch (error) {
+            console.log(error);
 
-    Swal.fire({
-      icon: "error",
-      title: "Oops!",
-      text: "Failed to delete the idea.",
-    });
-  }
-};
+            Swal.fire({
+                icon: "error",
+                title: "Oops!",
+                text: "Failed to delete the idea.",
+            });
+        }
+    };
 
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8 bg-[#F5F7FA] min-h-screen">
+        <div className="min-h-screen bg-[#F5F7FA] mx-auto p-4 sm:p-6 lg:p-8">
             <div className="max-w-4xl mx-auto">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h1 className="text-2xl sm:text-3xl font-bold text-[#1A3D63] tracking-tight">
-                            My Ideas
+                            📝 My Ideas
                         </h1>
                         <p className="text-gray-500 mt-1 text-sm sm:text-base">
                             {ideas.length > 0

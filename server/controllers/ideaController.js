@@ -24,10 +24,43 @@ export const createIdea = async (req, res) => {
 export const getIdeas = async (req, res) => {
   try {
     const ideas = await Idea.find().sort({ createdAt: -1 });
+    const maxLikes = Math.max(
+      ...ideas.map((idea) => idea.likedBy?.length || 0),
+      1
+    );
+
+    const maxSaves = Math.max(
+      ...ideas.map((idea) => idea.savedBy?.length || 0),
+      1
+    );
+
+    const maxComments = Math.max(
+      ...ideas.map((idea) => idea.comments?.length || 0),
+      1
+    );
+    const ideasWithScore = ideas.map((idea) => {
+
+      const likes = idea.likedBy?.length || 0;
+      const saves = idea.savedBy?.length || 0;
+      const comments = idea.comments?.length || 0;
+
+      const likeScore = (likes / maxLikes) * 40;
+      const saveScore = (saves / maxSaves) * 35;
+      const commentScore = (comments / maxComments) * 25;
+
+      const validationScore = Math.round(
+        likeScore + saveScore + commentScore
+      );
+
+      return {
+        ...idea.toObject(),
+        validationScore,
+      };
+    });
 
     res.status(200).json({
       success: true,
-      ideas,
+      ideas: ideasWithScore,
     });
   } catch (error) {
     res.status(500).json({
@@ -36,6 +69,7 @@ export const getIdeas = async (req, res) => {
     });
   }
 };
+
 
 export const getMyIdeas = async (req, res) => {
   try {

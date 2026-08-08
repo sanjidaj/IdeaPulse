@@ -13,7 +13,17 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
-
+import {
+    FaRocket,
+    FaCheckCircle,
+    FaAdjust,
+    FaRegClock,
+    FaExclamationCircle,
+    FaChartLine,
+    FaChevronDown,
+    FaChevronUp,
+    FaBookmark,
+} from "react-icons/fa";
 const IdeaCard = ({
     idea,
     showActions = false,
@@ -30,6 +40,9 @@ const IdeaCard = ({
     const [dislikedBy, setDislikedBy] = useState(
         idea.dislikedBy || []
     );
+    const [savedBy, setSavedBy] = useState(
+        idea.savedBy || []
+    );
 
     const liked = likedBy.includes(user.email);
     const disliked = dislikedBy.includes(user.email);
@@ -41,12 +54,42 @@ const IdeaCard = ({
         idea.savedBy?.includes(user?.email) || false
     );
 
+
     const [showComments, setShowComments] = useState(openComments);
     const [comment, setComment] = useState("");
 
     const [comments, setComments] = useState(
         idea.comments || []
     );
+    const [showValidation, setShowValidation] = useState(false);
+    const likes = likedBy.length;
+    const saves = savedBy.length;
+    const commentCount = comments.length;
+    const validationScore = Math.min(
+        100,
+        likes * 4 + saves * 5 + commentCount * 3
+    );
+    const getValidationStatus = (score) => {
+        if (score >= 85) return "Highly Validated";
+        if (score >= 70) return "Promising Idea";
+        if (score >= 50) return "Moderate Interest";
+        if (score >= 30) return "Early Interest";
+        return "Low Interest";
+    };
+    const getStatusIcon = (score) => {
+        if (score >= 85) return FaRocket;
+        if (score >= 70) return FaCheckCircle;
+        if (score >= 50) return FaAdjust;
+        if (score >= 30) return FaRegClock;
+        return FaExclamationCircle;
+    };
+   const getStatusColor = (score) => {
+    if (score >= 85) return { solid: "#22C55E", soft: "#F0FDF4" }; // Highly Validated — green-500 / green-50
+    if (score >= 70) return { solid: "#FACC15", soft: "#F7FEE7" }; // Promising Idea — yellow-400 / lime-50
+    if (score >= 50) return { solid: "#F59E0B", soft: "#FFFBEB" }; // Moderate Interest — amber-500 / amber-50
+    if (score >= 30) return { solid: "#F97316", soft: "#FFF7ED" }; // Early Interest — orange-500 / orange-50
+    return { solid: "#EF4444", soft: "#FEF2F2" };                  // Low Interest — red-500 / red-50 (unchanged)
+};
 
     const handleLike = async () => {
         const res = await api.put(
@@ -79,6 +122,18 @@ const IdeaCard = ({
             });
 
             setSaved(res.data.saved);
+
+            // Update save count immediately
+            setSavedBy((prev) => {
+                if (res.data.saved) {
+                    return [...prev, user.email];
+                }
+
+                return prev.filter(
+                    (email) => email !== user.email
+                );
+            });
+
         } catch (error) {
             console.log(error);
         }
@@ -197,6 +252,140 @@ const IdeaCard = ({
                         {idea.solution}
                     </p>
                 </div>
+
+            </div>
+            {/* Validation Score */}
+            {/* Validation Score */}
+            <div className="mt-5">
+
+                <button
+                    onClick={() => setShowValidation(!showValidation)}
+                    className="flex items-center gap-2 text-sm font-medium text-[#1A3D63] hover:text-[#4A7FA7] transition-colors"
+                >
+                    <FaChartLine size={14} />
+                    {showValidation ? "Hide Validation Score" : "View Validation Score"}
+                    {showValidation ? (
+                        <FaChevronUp size={10} className="text-gray-400" />
+                    ) : (
+                        <FaChevronDown size={10} className="text-gray-400" />
+                    )}
+                </button>
+
+                {showValidation && (() => {
+                    const StatusIcon = getStatusIcon(validationScore);
+                    const { solid, soft } = getStatusColor(validationScore);
+                    const radius = 34;
+                    const circumference = 2 * Math.PI * radius;
+                    const offset = circumference - (validationScore / 100) * circumference;
+
+                    return (
+                        <div className="mt-4 rounded-2xl border border-[#D8EAF6] bg-linear-to-br from-[#F7FBFE] to-white p-6 shadow-sm">
+
+                            <div className="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 className="font-semibold text-[#1A3D63] text-base">
+                                        Idea Validation Score
+                                    </h3>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Based on community engagement
+                                    </p>
+
+                                    <span
+                                        className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-xs font-semibold border"
+                                        style={{
+                                            backgroundColor: soft,
+                                            color: solid,
+                                            borderColor: solid + "33",
+                                        }}
+                                    >
+                                        <StatusIcon size={12} style={{ color: solid }} />
+                                        {getValidationStatus(validationScore)}
+                                    </span>
+                                </div>
+
+                                {/* Circular progress ring */}
+                                <div className="relative w-24 h-24 shrink-0">
+                                    <svg viewBox="0 0 80 80" className="w-24 h-24 -rotate-90">
+                                        <circle
+                                            cx="40"
+                                            cy="40"
+                                            r={radius}
+                                            fill="none"
+                                            stroke="#E5EEF5"
+                                            strokeWidth="8"
+                                        />
+                                        <circle
+                                            cx="40"
+                                            cy="40"
+                                            r={radius}
+                                            fill="none"
+                                            stroke={solid}
+                                            strokeWidth="8"
+                                            strokeLinecap="round"
+                                            strokeDasharray={circumference}
+                                            strokeDashoffset={offset}
+                                            style={{ transition: "stroke-dashoffset 0.6s ease, stroke 0.4s ease" }}
+                                        />
+                                    </svg>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-xl font-bold text-[#1A3D63] leading-none">
+                                            {validationScore}
+                                        </span>
+                                        <span className="text-[10px] text-gray-400 mt-0.5">
+                                            / 100
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {/* Slim progress bar — matches status color */}
+                            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-5">
+                                <div
+                                    className="h-full rounded-full transition-all duration-500"
+                                    style={{ width: `${validationScore}%`, backgroundColor: solid }}
+                                />
+                            </div>
+
+                            {/* Breakdown */}
+                            <div className="grid grid-cols-3 gap-3 mt-5">
+
+                                <div className="flex flex-col items-center gap-1.5 bg-white rounded-xl p-3.5 border border-gray-100 hover:border-[#D8EAF6] hover:shadow-sm transition-all">
+                                    <div className="w-8 h-8 rounded-full bg-[#e7fff0] flex items-center justify-center">
+                                        <FaHeart className="text-[#22C55E]" size={13} />
+                                    </div>
+                                    <p className=" font-bold text-[#22C55E] leading-none">
+                                        {likes}
+                                    </p>
+                                    <p className="text-[11px] text-[#22C55E]">Likes</p>
+                                </div>
+
+                                <div className="flex flex-col items-center gap-1.5 bg-white rounded-xl p-3.5 border border-gray-100 hover:border-[#D8EAF6] hover:shadow-sm transition-all">
+                                    <div className="w-8 h-8 rounded-full bg-[#fff8f8] flex items-center justify-center">
+                                        <FaBookmark className="text-[#EF4444]" size={12} />
+                                    </div>
+                                    <p className="text-base font-bold text-[#EF4444] leading-none">
+                                        {saves}
+                                    </p>
+                                    <p className="text-[11px] text-[#EF4444]">Saves</p>
+                                </div>
+
+                                <div className="flex flex-col items-center gap-1.5 bg-white rounded-xl p-3.5 border border-gray-100 hover:border-[#D8EAF6] hover:shadow-sm transition-all">
+                                    <div className="w-8 h-8 rounded-full bg-[#EAF3FB] flex items-center justify-center">
+                                        <MdOutlineInsertComment className="text-[#4A7FA7]" size={15} />
+                                    </div>
+                                    <p className="text-base font-bold text-[#4A7FA7] leading-none">
+                                        {commentCount}
+                                    </p>
+                                    <p className="text-[11px] text-[#4A7FA7]">Comments</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    );
+                })()}
 
             </div>
 
