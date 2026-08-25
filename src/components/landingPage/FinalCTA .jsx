@@ -4,12 +4,10 @@ import { Link } from "react-router";
 const FinalCTA = () => {
   return (
     <section className="relative bg-[#0A1931] py-10 px-6 lg:px-8 overflow-hidden">
-      {/* background glow accents */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#4A7FA7]/20 blur-3xl" />
       <div className="absolute -top-10 -left-10 w-64 h-64 rounded-full bg-[#1A3D63]/40 blur-3xl" />
       <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full bg-[#4A7FA7]/20 blur-3xl" />
 
-      {/* dot grid texture */}
       <div
         className="absolute inset-0 opacity-20"
         style={{
@@ -36,13 +34,13 @@ const FinalCTA = () => {
 
         <div className="flex flex-wrap justify-center gap-5 mt-10">
           <Link to="/submit-idea">
-            <button className="bg-gradient-to-r from-[#1A3D63] to-[#4A7FA7] hover:from-[#1A3D63] hover:to-[#1A3D63] transition-all duration-300 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-2 hover:-translate-y-0.5 text-lg">
+            <button className="bg-linear-to-r from-[#1A3D63] to-[#4A7FA7] hover:from-[#1A3D63] hover:to-[#1A3D63] transition-all duration-300 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-2 hover:-translate-y-0.5 text-lg">
               Submit your idea
               <FaArrowRight />
             </button>
           </Link>
 
-          <div className="group p-[1.5px] rounded-xl bg-gradient-to-r from-[#4A7FA7] to-[#1A3D63] hover:-translate-y-0.5 transition-transform duration-300">
+          <div className="group p-[1.5px] rounded-xl bg-linear-to-r from-[#4A7FA7] to-[#1A3D63] hover:-translate-y-0.5 transition-transform duration-300">
             <Link to="/explore">
               <button className="bg-[#0A1931] group-hover:bg-transparent text-white px-8 py-4 rounded-[11px] font-semibold transition-all duration-300 text-lg">
                 Explore ideas

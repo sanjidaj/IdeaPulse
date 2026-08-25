@@ -31,6 +31,7 @@ const Navbar = () => {
     if (!keyword.trim()) return;
 
     navigate(`/search?keyword=${keyword}`);
+    setMobileSearchOpen(false);
   };
   const [notifications, setNotifications] = useState([]);
   useEffect(() => {
@@ -82,9 +83,12 @@ const Navbar = () => {
     }
   };
 
+  // Mobile search toggle (UI-only addition for responsiveness)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
   return (
     <nav className="sticky top-0 z-50 border-b border-white/20 bg-white/80 backdrop-blur-xl shadow-sm">
-      <div className="max-w-7xl mx-auto flex h-15 items-center justify-between px-6">
+      <div className="max-w-7xl mx-auto flex h-15 items-center justify-between px-4 sm:px-6">
 
         {/* Logo */}
         <Link
@@ -94,13 +98,13 @@ const Navbar = () => {
           <img
             src={logoImg}
             alt="Logo"
-            className="h-11 w-auto"
+            className="h-9 sm:h-11 w-auto"
           />
 
           <img
             src={LogoText}
             alt="Logo Text"
-            className="h-7 w-auto"
+            className="h-5 sm:h-7 w-auto"
           />
         </Link>
 
@@ -149,13 +153,13 @@ const Navbar = () => {
         </ul>
 
         {/* Right Side */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-5">
 
           {user ? (
             <>
               <button
                 onClick={handleOpenNotifications}
-                className="relative p-2.5 rounded-full text-[#1A3D63] hover:bg-[#EAF3FB] transition"
+                className="relative p-2 sm:p-2.5 rounded-full text-[#1A3D63] hover:bg-[#EAF3FB] transition"
               >
                 <FaBell size={18} />
 
@@ -165,8 +169,9 @@ const Navbar = () => {
                   </span>
                 )}
               </button>
-              {/* Search */}
-              <form onSubmit={handleSearch}>
+
+              {/* Search - full input on larger screens */}
+              <form onSubmit={handleSearch} className="hidden md:block">
                 <div className="relative">
                   <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A7FA7]" />
 
@@ -175,7 +180,7 @@ const Navbar = () => {
                     placeholder="Search ideas..."
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    className="w-72 rounded-full border border-gray-200 bg-[#F8FBFD]
+                    className="w-40 lg:w-72 rounded-full border border-gray-200 bg-[#F8FBFD]
                     pl-11 pr-5 py-2.5 text-sm
                     outline-none transition-all duration-300
                   focus:border-[#4A7FA7]
@@ -183,6 +188,17 @@ const Navbar = () => {
                   />
                 </div>
               </form>
+
+              {/* Search - icon toggle on mobile/tablet */}
+              <button
+                type="button"
+                onClick={() => setMobileSearchOpen((prev) => !prev)}
+                className="p-2 rounded-full text-[#1A3D63] hover:bg-[#EAF3FB] transition md:hidden"
+                aria-label="Toggle search"
+              >
+                <FaSearch size={16} />
+              </button>
+
               {/* User Dropdown */}
               <div className="dropdown dropdown-end">
                 <div
@@ -190,14 +206,14 @@ const Navbar = () => {
                   role="button"
                   className="cursor-pointer"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-[#1A3D63] to-[#4A7FA7] text-lg font-bold text-white ring-2 ring-[#4A7FA7]/20 transition-all duration-300 hover:scale-105 hover:ring-[#4A7FA7]/50">
+                  <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-linear-to-br from-[#1A3D63] to-[#4A7FA7] text-base sm:text-lg font-bold text-white ring-2 ring-[#4A7FA7]/20 transition-all duration-300 hover:scale-105 hover:ring-[#4A7FA7]/50">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                 </div>
 
                 <div
                   tabIndex={0}
-                  className="dropdown-content mt-4 w-80 rounded-3xl border border-gray-100 bg-white p-3 shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-100"
+                  className="dropdown-content mt-4 w-72 sm:w-80 max-w-[90vw] rounded-3xl border border-gray-100 bg-white p-3 shadow-[0_20px_60px_rgba(0,0,0,0.12)] z-100"
                 >
                   {/* Profile Header */}
                   <div className="rounded-2xl bg-linear-to-br from-[#EEF6FC] to-white p-6">
@@ -261,7 +277,7 @@ const Navbar = () => {
               {/* Login */}
               <Link
                 to="/login"
-                className="rounded-xl border border-[#4A7FA7] px-5 py-2.5 font-medium text-[#1A3D63] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#EEF6FC]"
+                className="rounded-xl border border-[#4A7FA7] px-3 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base font-medium text-[#1A3D63] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#EEF6FC]"
               >
                 Login
               </Link>
@@ -269,7 +285,7 @@ const Navbar = () => {
               {/* Get Started */}
               <Link
                 to="/register"
-                className="rounded-xl bg-linear-to-r from-[#1A3D63] to-[#4A7FA7] px-5 py-2.5 font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#4A7FA7]/30"
+                className="hidden sm:inline-block rounded-xl bg-linear-to-r from-[#1A3D63] to-[#4A7FA7] px-5 py-2.5 font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#4A7FA7]/30"
               >
                 Get Started
               </Link>
@@ -277,6 +293,29 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile search bar (shown when toggled, below top bar) */}
+      {mobileSearchOpen && (
+        <div className="md:hidden border-t border-gray-100 bg-white/95 px-4 py-3">
+          <form onSubmit={handleSearch}>
+            <div className="relative">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A7FA7]" />
+              <input
+                type="text"
+                placeholder="Search ideas..."
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                autoFocus
+                className="w-full rounded-full border border-gray-200 bg-[#F8FBFD]
+                pl-11 pr-5 py-2.5 text-sm
+                outline-none transition-all duration-300
+                focus:border-[#4A7FA7]
+                focus:ring-4 focus:ring-[#4A7FA7]/20"
+              />
+            </div>
+          </form>
+        </div>
+      )}
     </nav>
   );
 };

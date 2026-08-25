@@ -3,36 +3,36 @@ import { Link } from "react-router";
 
 const Hero = () => {
   return (
-    <section className="min-h-screen bg-[#0A1931] overflow-hidden">
-      <div className="max-w-6xl mx-auto h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-12 px-6 lg:px-8">
+    <section className="min-h-screen bg-[#0A1931] overflow-x-hidden">
+      <div className="max-w-6xl mx-auto min-h-screen lg:h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-10 sm:gap-12 px-5 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-0">
         {/* Left: content, left-aligned */}
-        <div className="text-left order-2 lg:order-1 py-16 lg:py-0">
-          <span className="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-[#4A7FA7] mb-6">
+        <div className="text-left order-2 lg:order-1">
+          <span className="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-[#4A7FA7] mb-4 sm:mb-6">
             Idea Validation Platform
           </span>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold text-white leading-[1.1] tracking-tight">
+          <h1 className="text-3xl sm:text-5xl lg:text-[3.4rem] font-extrabold text-white leading-[1.15] sm:leading-[1.1] tracking-tight">
             Validate your startup
-            <br />
+            <br className="hidden sm:block" />
             idea before you build it.
           </h1>
 
-          <p className="text-[#738da1] text-lg mt-6 max-w-md leading-relaxed">
+          <p className="text-[#738da1] text-base sm:text-lg mt-5 sm:mt-6 max-w-md leading-relaxed">
             Share your startup idea, gather meaningful feedback and validate
             demand before development.
           </p>
 
-          <div className="flex flex-wrap gap-5 mt-10">
-            <Link to="/submit-idea">
-              <button className="bg-gradient-to-r from-[#1A3D63] to-[#4A7FA7] hover:from-[#1A3D63] hover:to-[#1A3D63] transition-all duration-300 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:-translate-y-0.5">
+          <div className="flex flex-wrap gap-4 sm:gap-5 mt-8 sm:mt-10">
+            <Link to="/submit-idea" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto justify-center bg-gradient-to-r from-[#1A3D63] to-[#4A7FA7] hover:from-[#1A3D63] hover:to-[#1A3D63] transition-all duration-300 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:-translate-y-0.5">
                 Submit your idea
                 <FaArrowRight />
               </button>
             </Link>
 
-            <div className="group p-[1.5px] rounded-xl bg-gradient-to-r from-[#4A7FA7] to-[#1A3D63] hover:-translate-y-0.5 transition-transform duration-300">
-              <Link to="/explore">
-                <button className="bg-[#0A1931] group-hover:bg-transparent text-white px-6 py-3 rounded-[11px] font-semibold transition-all duration-300">
+            <div className="w-full sm:w-auto group p-[1.5px] rounded-xl bg-gradient-to-r from-[#4A7FA7] to-[#1A3D63] hover:-translate-y-0.5 transition-transform duration-300">
+              <Link to="/explore" className="block">
+                <button className="w-full sm:w-auto bg-[#0A1931] group-hover:bg-transparent text-white px-6 py-3 rounded-[11px] font-semibold transition-all duration-300">
                   Explore ideas
                 </button>
               </Link>
@@ -41,7 +41,7 @@ const Hero = () => {
         </div>
 
         {/* Right: generated illustration instead of a photo */}
-        <div className="relative order-1 lg:order-2 h-[45vh] lg:h-[70vh] w-full">
+        <div className="relative order-1 lg:order-2 h-[32vh] sm:h-[42vh] lg:h-[70vh] w-full">
           <div className="absolute inset-0 rounded-3xl overflow-hidden border border-[#4A7FA7]/20 bg-[#0A1931]">
             {/* dot grid texture */}
             <div
