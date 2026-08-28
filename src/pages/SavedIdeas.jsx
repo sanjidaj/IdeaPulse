@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import IdeaCard from "../components/IdeaCard";
@@ -11,22 +12,22 @@ const SavedIdeas = () => {
   useEffect(() => {
     const fetchSavedIdeas = async () => {
       try {
-        const res = await api.get(
-          `/ideas/saved/${user.email}`
-        );
+        const res = await api.get(`/ideas/saved/${user.email}`);
 
-        setIdeas(res.data.ideas);
+        setIdeas(res.data.ideas || []);
       } catch (error) {
         console.log(error);
+        setIdeas([]);
       }
     };
 
-    fetchSavedIdeas();
-  }, [user.email]);
+    if (user?.email) {
+      fetchSavedIdeas();
+    }
+  }, [user?.email]);
 
   return (
     <div className="min-h-screen bg-[#F5F7FA] mx-auto p-4 sm:p-6 lg:p-8">
-
       <div className="max-w-4xl mx-auto">
 
         <h1 className="text-3xl font-bold text-[#1A3D63] mb-2">
@@ -63,9 +64,9 @@ const SavedIdeas = () => {
         )}
 
       </div>
-
     </div>
   );
 };
 
 export default SavedIdeas;
+

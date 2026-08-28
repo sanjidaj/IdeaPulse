@@ -11,18 +11,23 @@ const MyIdeas = () => {
 
     const user = JSON.parse(localStorage.getItem("user"));
 
-    useEffect(() => {
-        const fetchMyIdeas = async () => {
-            try {
-                const res = await api.get(`/ideas/my-ideas/${user.id}`);
-                setIdeas(res.data.ideas);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+  useEffect(() => {
+    const fetchMyIdeas = async () => {
+        try {
+            const res = await api.get(`/ideas/my-ideas/${user.id}`);
+            setIdeas(res.data.ideas || []);
+        } catch (error) {
+            console.log(error);
+            setIdeas([]);
+        }
+    };
 
+    if (user?.id) {
         fetchMyIdeas();
-    }, [user.name]);
+    }
+}, [user?.id]);
+
+        
 
     const handleEdit = (idea) => {
         navigate("/submit-idea", {

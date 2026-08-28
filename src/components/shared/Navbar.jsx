@@ -41,7 +41,7 @@ const Navbar = () => {
           `/notifications/${user.id}`
         );
 
-        setNotifications(res.data.notifications);
+        setNotifications(res.data.notifications || []);
       } catch (error) {
         console.log(error);
       }
@@ -51,9 +51,9 @@ const Navbar = () => {
       fetchNotifications();
     }
   }, [user?.id]);
-  const unreadCount = notifications.filter(
-    (notification) => !notification.read
-  ).length;
+  const unreadCount = (notifications || []).filter(
+  (notification) => !notification.read
+).length;
 
   const handleOpenNotifications = async () => {
     try {
