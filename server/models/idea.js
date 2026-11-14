@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 
 const ideaSchema = new mongoose.Schema(
@@ -26,6 +27,7 @@ const ideaSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -47,20 +49,33 @@ const ideaSchema = new mongoose.Schema(
       default: 0,
     },
 
-    likedBy: {
-      type: [String], // store user emails
-      default: [],
-    },
+    likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
 
-    dislikedBy: {
-      type: [String],
-      default: [],
-    },
+    dislikedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
 
     comments: [
       {
-        user: String,
-        text: String,
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+
+        text: {
+          type: String,
+          required: true,
+        },
+
         createdAt: {
           type: Date,
           default: Date.now,
@@ -70,7 +85,8 @@ const ideaSchema = new mongoose.Schema(
 
     savedBy: [
       {
-        type: String, // user's email or id
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },

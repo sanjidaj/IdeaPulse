@@ -5,7 +5,7 @@ import LogoText from "../assets/logoText.png";
 import toast from "react-hot-toast";
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 // import logoImg from "../assets/logo.png"
-
+import { setAccessToken } from "../services/api";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -32,25 +32,34 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    try {
-      const res = await api.post("/auth/login", formData);
+  try {
+    const res = await api.post("/auth/login", formData);
 
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+    // Store access token in memory
+    setAccessToken(res.data.accessToken);
 
-      toast.success("Login successful!");
+    // Keep user information in localStorage
+    localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      navigate("/homepage");
-    } catch (error) {
-      console.log(error);
-      toast.error("Invalid email or password");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    toast.success("Login successful!");
+
+    navigate("/homepage");
+  } catch (error) {
+    console.log(error);
+
+    toast.error(
+      error.response?.data?.message || "Invalid email or password"
+    );
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0B1F33] via-[#132C47] to-[#1A3D63] p-4 relative overflow-hidden">

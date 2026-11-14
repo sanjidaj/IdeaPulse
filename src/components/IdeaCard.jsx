@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import api from "../services/api";
 
@@ -29,6 +30,18 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { MdOutlineInsertComment } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 
+// Get the MongoDB ID whether an item is populated or just an ObjectId string
+const getId = (item) => {
+    return String(item?._id ?? item ?? "");
+};
+
+// Check whether an array contains the current user's ID
+const hasUser = (array, userId) => {
+    if (!userId || !Array.isArray(array)) return false;
+
+    return array.some((item) => getId(item) === String(userId));
+};
+
 const IdeaCard = ({
     idea,
     showActions = false,
@@ -36,26 +49,28 @@ const IdeaCard = ({
     onEdit,
     openComments = false,
 }) => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    // Get logged-in user
+    const user = JSON.parse(localStorage.getItem("user") || "null");
 
+    // MongoDB user ID returned from login
+    const userId = user?.id || user?._id || null;
+
+    // Engagement states
     const [likedBy, setLikedBy] = useState(idea.likedBy || []);
-
     const [dislikedBy, setDislikedBy] = useState(idea.dislikedBy || []);
-
     const [savedBy, setSavedBy] = useState(idea.savedBy || []);
 
-    const liked = likedBy.includes(user.email);
-    const disliked = dislikedBy.includes(user.email);
+    // Check current user's engagement using MongoDB ID
+    const liked = hasUser(likedBy, userId);
+    const disliked = hasUser(dislikedBy, userId);
+    const saved = hasUser(savedBy, userId);
 
-    const [saved, setSaved] = useState(
-        idea.savedBy?.includes(user?.email) || false
-    );
-
+    // Comment states
     const [showComments, setShowComments] = useState(openComments);
     const [comment, setComment] = useState("");
-
     const [comments, setComments] = useState(idea.comments || []);
 
+    // Validation state
     const [showValidation, setShowValidation] = useState(false);
 
     const likes = likedBy.length;
@@ -84,29 +99,33 @@ const IdeaCard = ({
     };
 
     const getStatusColor = (score) => {
-        if (score >= 85)
+        if (score >= 85) {
             return {
                 solid: "#22C55E",
                 soft: "#F0FDF4",
             };
+        }
 
-        if (score >= 70)
+        if (score >= 70) {
             return {
                 solid: "#FACC15",
                 soft: "#F7FEE7",
             };
+        }
 
-        if (score >= 50)
+        if (score >= 50) {
             return {
                 solid: "#F59E0B",
                 soft: "#FFFBEB",
             };
+        }
 
-        if (score >= 30)
+        if (score >= 30) {
             return {
                 solid: "#F97316",
                 soft: "#FFF7ED",
             };
+        }
 
         return {
             solid: "#EF4444",
@@ -114,71 +133,103 @@ const IdeaCard = ({
         };
     };
 
+    // LIKE IDEA
     const handleLike = async () => {
-        const res = await api.put(
-            `/ideas/${idea._id}/like`,
-            {
-                email: user.email,
-            }
-        );
-
-        setLikedBy(res.data.idea.likedBy);
-        setDislikedBy(res.data.idea.dislikedBy);
-    };
-
-    const handleDislike = async () => {
-        const res = await api.put(
-            `/ideas/${idea._id}/dislike`,
-            {
-                email: user.email,
-            }
-        );
-
-        setLikedBy(res.data.idea.likedBy);
-        setDislikedBy(res.data.idea.dislikedBy);
-    };
-
-    const handleSave = async () => {
         try {
-            const res = await api.put(
-                `/ideas/${idea._id}/save`,
-                {
-                    email: user.email,
-                }
-            );
+            if (!userId) {
+                console.log("Please login to like an idea.");
+                return;
+            }
 
-            setSaved(res.data.saved);
+            const res = await api.put(`/ideas/${idea._id}/like`);
 
-            setSavedBy((prev) => {
-                if (res.data.saved) {
-                    return [...prev, user.email];
-                }
-
-                return prev.filter(
-                    (email) => email !== user.email
-                );
-            });
+            setLikedBy(res.data.idea.likedBy || []);
+            setDislikedBy(res.data.idea.dislikedBy || []);
         } catch (error) {
-            console.log(error);
+            console.error(
+                "Like error:",
+                error.response?.data?.message || error.message
+            );
         }
     };
 
+    // DISLIKE IDEA
+    const handleDislike = async () => {
+        try {
+            if (!userId) {
+                console.log("Please login to dislike an idea.");
+                return;
+            }
+
+            const res = await api.put(`/ideas/${idea._id}/dislike`);
+
+            setLikedBy(res.data.idea.likedBy || []);
+            setDislikedBy(res.data.idea.dislikedBy || []);
+        } catch (error) {
+            console.error(
+                "Dislike error:",
+                error.response?.data?.message || error.message
+            );
+        }
+    };
+
+    // SAVE / UNSAVE IDEA
+    const handleSave = async () => {
+        try {
+            if (!userId) {
+                console.log("Please login to save an idea.");
+                return;
+            }
+
+            const res = await api.put(`/ideas/${idea._id}/save`);
+
+            // Backend returns whether the idea is now saved
+            if (res.data.saved) {
+                setSavedBy((prev) => {
+                    if (hasUser(prev, userId)) return prev;
+
+                    return [...prev, userId];
+                });
+            } else {
+                setSavedBy((prev) =>
+                    prev.filter((item) => getId(item) !== String(userId))
+                );
+            }
+        } catch (error) {
+            console.error(
+                "Save error:",
+                error.response?.data?.message || error.message
+            );
+        }
+    };
+
+    // ADD COMMENT
     const handleComment = async () => {
         if (comment.trim() === "") return;
 
         try {
+            if (!userId) {
+                console.log("Please login to comment.");
+                return;
+            }
+
             const res = await api.post(
                 `/ideas/${idea._id}/comment`,
                 {
-                    user: user.name,
-                    text: comment,
+                    text: comment.trim(),
                 }
             );
 
-            setComments(res.data.comments);
+            setComments(
+                res.data.comments || res.data.idea?.comments || []
+            );
+
             setComment("");
         } catch (error) {
-            console.log(error);
+            console.error(
+                "Comment error:",
+                error.response?.data?.message || error.message
+            );
         }
     };
 
@@ -198,18 +249,16 @@ const IdeaCard = ({
                 <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
 
                     <div className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-linear-to-br from-[#1A3D63] to-[#4A7FA7] text-white flex items-center justify-center font-semibold text-sm sm:text-base shadow-sm">
-                        {idea.createdBy.charAt(0).toUpperCase()}
+                        {idea.createdBy?.charAt(0)?.toUpperCase() || "U"}
                     </div>
 
                     <div className="min-w-0">
                         <h2 className="font-semibold text-[#1A3D63] text-sm truncate">
-                            {idea.createdBy}
+                            {idea.createdBy || "User"}
                         </h2>
 
                         <p className="text-xs text-gray-400 truncate">
-                            {new Date(
-                                idea.createdAt
-                            ).toLocaleString(undefined, {
+                            {new Date(idea.createdAt).toLocaleString(undefined, {
                                 month: "short",
                                 day: "numeric",
                                 hour: "2-digit",
@@ -294,9 +343,7 @@ const IdeaCard = ({
             <div className="mt-5">
 
                 <button
-                    onClick={() =>
-                        setShowValidation(!showValidation)
-                    }
+                    onClick={() => setShowValidation(!showValidation)}
                     className="flex items-center gap-2 text-sm font-medium text-[#1A3D63] hover:text-[#4A7FA7] transition-colors"
                 >
                     <FaChartLine size={14} />
@@ -322,21 +369,15 @@ const IdeaCard = ({
 
                 {showValidation &&
                     (() => {
-                        const StatusIcon =
-                            getStatusIcon(validationScore);
-
-                        const { solid, soft } =
-                            getStatusColor(validationScore);
+                        const StatusIcon = getStatusIcon(validationScore);
+                        const { solid, soft } = getStatusColor(validationScore);
 
                         const radius = 34;
-
-                        const circumference =
-                            2 * Math.PI * radius;
+                        const circumference = 2 * Math.PI * radius;
 
                         const offset =
                             circumference -
-                            (validationScore / 100) *
-                            circumference;
+                            (validationScore / 100) * circumference;
 
                         return (
                             <div className="mt-4 rounded-2xl border border-[#D8EAF6] bg-linear-to-br from-[#F7FBFE] to-white p-4 sm:p-6 shadow-sm">
@@ -354,23 +395,20 @@ const IdeaCard = ({
                                             Based on community engagement
                                         </p>
 
-                                        <span className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-xs font-semibold border" style={{
-                                            backgroundColor:
-                                                soft,
-                                            color: solid,
-                                            borderColor:
-                                                solid + "33",
-                                        }}>
+                                        <span
+                                            className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-xs font-semibold border"
+                                            style={{
+                                                backgroundColor: soft,
+                                                color: solid,
+                                                borderColor: solid + "33",
+                                            }}
+                                        >
                                             <StatusIcon
                                                 size={12}
-                                                style={{
-                                                    color: solid,
-                                                }}
+                                                style={{ color: solid }}
                                             />
 
-                                            {getValidationStatus(
-                                                validationScore
-                                            )}
+                                            {getValidationStatus(validationScore)}
                                         </span>
                                     </div>
 
@@ -398,12 +436,8 @@ const IdeaCard = ({
                                                 stroke={solid}
                                                 strokeWidth="8"
                                                 strokeLinecap="round"
-                                                strokeDasharray={
-                                                    circumference
-                                                }
-                                                strokeDashoffset={
-                                                    offset
-                                                }
+                                                strokeDasharray={circumference}
+                                                strokeDashoffset={offset}
                                                 style={{
                                                     transition:
                                                         "stroke-dashoffset 0.6s ease, stroke 0.4s ease",
@@ -433,8 +467,7 @@ const IdeaCard = ({
                                         className="h-full rounded-full transition-all duration-500"
                                         style={{
                                             width: `${validationScore}%`,
-                                            backgroundColor:
-                                                solid,
+                                            backgroundColor: solid,
                                         }}
                                     />
                                 </div>
@@ -543,10 +576,11 @@ const IdeaCard = ({
                             {/* Like */}
                             <button
                                 onClick={handleLike}
-                                className={`flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${liked
-                                    ? "bg-white text-[#1A3D63] font-medium"
-                                    : "text-gray-500 hover:text-[#1A3D63]"
-                                    }`}
+                                className={`flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${
+                                    liked
+                                        ? "bg-white text-[#1A3D63] font-medium"
+                                        : "text-gray-500 hover:text-[#1A3D63]"
+                                }`}
                             >
                                 {liked ? (
                                     <BiSolidLike size={18} />
@@ -560,10 +594,11 @@ const IdeaCard = ({
                             {/* Dislike */}
                             <button
                                 onClick={handleDislike}
-                                className={`flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${disliked
-                                    ? "bg-white text-gray-800 font-medium"
-                                    : "text-gray-500 hover:text-gray-800"
-                                    }`}
+                                className={`flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${
+                                    disliked
+                                        ? "bg-white text-gray-800 font-medium"
+                                        : "text-gray-500 hover:text-gray-800"
+                                }`}
                             >
                                 {disliked ? (
                                     <BiSolidDislike size={18} />
@@ -581,15 +616,12 @@ const IdeaCard = ({
 
                             {/* Comment */}
                             <button
-                                onClick={() =>
-                                    setShowComments(
-                                        !showComments
-                                    )
-                                }
-                                className={`flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${showComments
-                                    ? "bg-[#EAF3FB] text-[#1A3D63] font-medium"
-                                    : "text-gray-500 hover:bg-gray-100"
-                                    }`}
+                                onClick={() => setShowComments(!showComments)}
+                                className={`flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${
+                                    showComments
+                                        ? "bg-[#EAF3FB] text-[#1A3D63] font-medium"
+                                        : "text-gray-500 hover:bg-gray-100"
+                                }`}
                             >
                                 <MdOutlineInsertComment size={19} />
 
@@ -603,10 +635,11 @@ const IdeaCard = ({
                             {/* Save */}
                             <button
                                 onClick={handleSave}
-                                className={`flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${saved
-                                    ? "text-[#E0263A] bg-[#FCE8EA] font-medium"
-                                    : "text-gray-500 hover:bg-gray-100"
-                                    }`}
+                                className={`flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 text-sm ${
+                                    saved
+                                        ? "text-[#E0263A] bg-[#FCE8EA] font-medium"
+                                        : "text-gray-500 hover:bg-gray-100"
+                                }`}
                             >
                                 {saved ? (
                                     <FaHeart size={16} />
@@ -615,9 +648,7 @@ const IdeaCard = ({
                                 )}
 
                                 <span>
-                                    {saved
-                                        ? "Saved"
-                                        : "Save"}
+                                    {saved ? "Saved" : "Save"}
                                 </span>
                             </button>
 
@@ -638,21 +669,15 @@ const IdeaCard = ({
                         <input
                             type="text"
                             value={comment}
-                            onChange={(e) =>
-                                setComment(e.target.value)
-                            }
-                            onKeyDown={
-                                handleCommentKeyDown
-                            }
+                            onChange={(e) => setComment(e.target.value)}
+                            onKeyDown={handleCommentKeyDown}
                             placeholder="Write a comment..."
                             className="flex-1 min-w-0 border border-gray-200 rounded-full px-4 py-2.5 text-sm outline-none focus:border-[#4A7FA7] focus:ring-2 focus:ring-[#EAF3FB] transition"
                         />
 
                         <button
                             onClick={handleComment}
-                            disabled={
-                                comment.trim() === ""
-                            }
+                            disabled={comment.trim() === ""}
                             aria-label="Send comment"
                             className="shrink-0 w-10 h-10 rounded-full bg-[#1A3D63] text-white flex items-center justify-center hover:bg-[#264F7E] disabled:opacity-40 disabled:hover:bg-[#1A3D63] transition-colors"
                         >
@@ -664,30 +689,37 @@ const IdeaCard = ({
                     {/* Comments List */}
                     <div className="mt-4 space-y-2.5">
 
-                        {comments.map((c, index) => (
-                            <div
-                                key={index}
-                                className="flex gap-3 bg-[#F7F9FB] rounded-2xl p-3 sm:p-3.5"
-                            >
+                        {comments.map((c, index) => {
+                            // Backend may return a populated user object
+                            // or a plain user ID
+                            const commentUser =
+                                typeof c.user === "object"
+                                    ? c.user?.name || "User"
+                                    : "User";
 
-                                <div className="w-8 h-8 shrink-0 rounded-full bg-[#4A7FA7] text-white flex items-center justify-center text-xs font-semibold">
-                                    {c.user
-                                        ?.charAt(0)
-                                        .toUpperCase()}
+                            return (
+                                <div
+                                    key={c._id || index}
+                                    className="flex gap-3 bg-[#F7F9FB] rounded-2xl p-3 sm:p-3.5"
+                                >
+
+                                    <div className="w-8 h-8 shrink-0 rounded-full bg-[#4A7FA7] text-white flex items-center justify-center text-xs font-semibold">
+                                        {commentUser.charAt(0).toUpperCase()}
+                                    </div>
+
+                                    <div className="min-w-0">
+                                        <h3 className="font-semibold text-[#1A3D63] text-sm">
+                                            {commentUser}
+                                        </h3>
+
+                                        <p className="text-gray-600 text-sm mt-0.5 break-words">
+                                            {c.text}
+                                        </p>
+                                    </div>
+
                                 </div>
-
-                                <div className="min-w-0">
-                                    <h3 className="font-semibold text-[#1A3D63] text-sm">
-                                        {c.user}
-                                    </h3>
-
-                                    <p className="text-gray-600 text-sm mt-0.5 break-words">
-                                        {c.text}
-                                    </p>
-                                </div>
-
-                            </div>
-                        ))}
+                            );
+                        })}
 
                     </div>
 

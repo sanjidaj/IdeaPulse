@@ -1,3 +1,4 @@
+
 import express from "express";
 import {
   addComment,
@@ -11,34 +12,28 @@ import {
   likeIdea,
   saveIdea,
   searchIdeas,
- 
   updateIdea,
 } from "../controllers/ideaController.js";
 
-
+import { verifyToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-// Create a new idea
-router.post("/", createIdea);
-
-// Get all ideas
+// Public routes
 router.get("/", getIdeas);
-
-// Get only the logged-in user's ideas
-router.get("/my-ideas/:id", getMyIdeas);
-router.put("/:id/like", likeIdea);
-router.put("/:id/dislike", dislikeIdea);
-router.put("/:id/save", saveIdea);
-router.post("/:id/comment", addComment);
-
-router.delete("/:id", deleteIdea);
-
-router.put("/:id", updateIdea);
-router.get("/saved/:email", getSavedIdeas);
 router.get("/search", searchIdeas);
-
 router.get("/:id", getIdeaById);
 
+// Protected routes
+router.post("/", verifyToken, createIdea);
+router.get("/my-ideas", verifyToken, getMyIdeas);
+router.get("/saved", verifyToken, getSavedIdeas);
 
+router.put("/:id/like", verifyToken, likeIdea);
+router.put("/:id/dislike", verifyToken, dislikeIdea);
+router.put("/:id/save", verifyToken, saveIdea);
+router.post("/:id/comment", verifyToken, addComment);
+
+router.put("/:id", verifyToken, updateIdea);
+router.delete("/:id", verifyToken, deleteIdea);
 
 export default router;
