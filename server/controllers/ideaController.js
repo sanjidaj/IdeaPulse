@@ -5,9 +5,8 @@ import Idea from "../models/idea.js";
 import User from "../models/User.js";
 import Notification from "../models/Notification.js";
 
-// ============================================
 // HELPER FUNCTIONS
-// ============================================
+
 
 // Safely check whether an array contains a user ID
 const hasUser = (array, userId) => {
@@ -90,9 +89,8 @@ const createInteractionNotification = async ({
 //   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // };
 
-// ============================================
 // CREATE A NEW IDEA
-// ============================================
+
 
 export const createIdea = async (req, res) => {
   try {
@@ -153,9 +151,9 @@ export const createIdea = async (req, res) => {
   }
 };
 
-// ============================================
+
 // GET ALL IDEAS
-// ============================================
+
 
 export const getIdeas = async (req, res) => {
   try {
@@ -219,9 +217,7 @@ export const getIdeas = async (req, res) => {
   }
 };
 
-// ============================================
 // GET LOGGED-IN USER'S IDEAS
-// ============================================
 
 export const getMyIdeas = async (req, res) => {
   try {
@@ -245,9 +241,8 @@ export const getMyIdeas = async (req, res) => {
   }
 };
 
-// ============================================
+
 // LIKE AN IDEA
-// ============================================
 
 export const likeIdea = async (req, res) => {
   try {
@@ -313,9 +308,8 @@ export const likeIdea = async (req, res) => {
   }
 };
 
-// ============================================
+
 // DISLIKE AN IDEA
-// ============================================
 
 export const dislikeIdea = async (req, res) => {
   try {
@@ -372,9 +366,8 @@ export const dislikeIdea = async (req, res) => {
   }
 };
 
-// ============================================
 // SAVE OR UNSAVE AN IDEA
-// ============================================
+
 
 export const saveIdea = async (req, res) => {
   try {
@@ -431,10 +424,7 @@ export const saveIdea = async (req, res) => {
   }
 };
 
-// ============================================
 // ADD A COMMENT
-// ============================================
-
 export const addComment = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.user.id);
@@ -498,9 +488,8 @@ export const addComment = async (req, res) => {
   }
 };
 
-// ============================================
+
 // DELETE AN IDEA (OWNER ONLY)
-// ============================================
 
 export const deleteIdea = async (req, res) => {
   try {
@@ -536,9 +525,8 @@ export const deleteIdea = async (req, res) => {
   }
 };
 
-// ============================================
+
 // UPDATE AN IDEA (OWNER ONLY)
-// ============================================
 
 export const updateIdea = async (req, res) => {
   try {
@@ -589,9 +577,7 @@ export const updateIdea = async (req, res) => {
   }
 };
 
-// ============================================
 // GET LOGGED-IN USER'S SAVED IDEAS
-// ============================================
 
 export const getSavedIdeas = async (req, res) => {
   try {
@@ -615,9 +601,9 @@ export const getSavedIdeas = async (req, res) => {
   }
 };
 
-// ============================================
+
 // SEARCH IDEAS
-// ============================================
+
 
 
 export const searchIdeas = async (req, res) => {
@@ -666,7 +652,14 @@ export const searchIdeas = async (req, res) => {
                 {
                   autocomplete: {
                     query: searchTerm,
-                    path: ["description", "tags"],
+                    path: "description",
+                    tokenOrder: "sequential",
+                  },
+                },
+                {
+                  autocomplete: {
+                    query: searchTerm,
+                    path: "tags",
                     tokenOrder: "sequential",
                   },
                 },
@@ -729,9 +722,8 @@ export const searchIdeas = async (req, res) => {
 };
 
 
-// ============================================
+
 // GET A SINGLE IDEA
-// ============================================
 
 export const getIdeaById = async (req, res) => {
   try {
