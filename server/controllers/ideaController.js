@@ -219,13 +219,22 @@ export const getIdeas = async (req, res) => {
 
 // GET LOGGED-IN USER'S IDEAS
 
+
 export const getMyIdeas = async (req, res) => {
   try {
+    console.log("Authenticated user ID:", req.user.id);
+
+    const allIdeas = await Idea.find().select("title userId");
+
+    console.log("All ideas and their owners:", allIdeas);
+
     const ideas = await Idea.find({
       userId: req.user.id,
     })
       .sort({ createdAt: -1 })
       .populate("comments.user", "name");
+
+    console.log("My ideas found:", ideas.length);
 
     return res.status(200).json({
       success: true,
@@ -240,6 +249,7 @@ export const getMyIdeas = async (req, res) => {
     });
   }
 };
+
 
 
 // LIKE AN IDEA

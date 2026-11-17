@@ -7,24 +7,26 @@ import { FaRegHeart } from "react-icons/fa";
 const SavedIdeas = () => {
   const [ideas, setIdeas] = useState([]);
 
-  const user = JSON.parse(localStorage.getItem("user"));
 
-  useEffect(() => {
-    const fetchSavedIdeas = async () => {
-      try {
-        const res = await api.get(`/ideas/saved/${user.email}`);
 
-        setIdeas(res.data.ideas || []);
-      } catch (error) {
-        console.log(error);
-        setIdeas([]);
-      }
-    };
+useEffect(() => {
+  const fetchSavedIdeas = async () => {
+    try {
+      const res = await api.get("/ideas/saved");
 
-    if (user?.email) {
-      fetchSavedIdeas();
+      setIdeas(res.data.ideas || []);
+    } catch (error) {
+      console.log(
+        "Fetch Saved Ideas Error:",
+        error.response?.data || error
+      );
+      setIdeas([]);
     }
-  }, [user?.email]);
+  };
+
+  fetchSavedIdeas();
+}, []);
+
 
   return (
     <div className="min-h-screen bg-[#F5F7FA] mx-auto p-4 sm:p-6 lg:p-8">

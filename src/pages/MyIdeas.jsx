@@ -11,23 +11,29 @@ const MyIdeas = () => {
 
     const user = JSON.parse(localStorage.getItem("user"));
 
-  useEffect(() => {
-    const fetchMyIdeas = async () => {
-        try {
-            const res = await api.get(`/ideas/my-ideas/${user.id}`);
-            setIdeas(res.data.ideas || []);
-        } catch (error) {
-            console.log(error);
-            setIdeas([]);
-        }
-    };
 
-    if (user?.id) {
+    useEffect(() => {
+        const fetchMyIdeas = async () => {
+            try {
+                console.log("Logged-in user:", user);
+                console.log("User ID:", user?.id);
+
+                const res = await api.get("/ideas/my-ideas");
+
+                console.log("My Ideas Response:", res.data);
+
+                setIdeas(res.data.ideas || []);
+            } catch (error) {
+                console.log("Fetch My Ideas Error:", error.response?.data || error);
+                setIdeas([]);
+            }
+        };
+
         fetchMyIdeas();
-    }
-}, [user?.id]);
+    }, []);
 
-        
+
+
 
     const handleEdit = (idea) => {
         navigate("/submit-idea", {
