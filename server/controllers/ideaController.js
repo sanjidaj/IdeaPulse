@@ -86,9 +86,9 @@ const createInteractionNotification = async ({
 };
 
 // Escape special characters for search regex
-const escapeRegex = (value) => {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-};
+// const escapeRegex = (value) => {
+//   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+// };
 
 // ============================================
 // CREATE A NEW IDEA
@@ -619,6 +619,7 @@ export const getSavedIdeas = async (req, res) => {
 // SEARCH IDEAS
 // ============================================
 
+
 export const searchIdeas = async (req, res) => {
   try {
     const { keyword } = req.query;
@@ -630,23 +631,88 @@ export const searchIdeas = async (req, res) => {
       });
     }
 
-    const searchRegex = new RegExp(
-      escapeRegex(keyword.trim()),
-      "i"
-    );
+    const searchTerm = keyword.trim();
 
-    const ideas = await Idea.find({
-      $or: [
-        { title: searchRegex },
-        { category: searchRegex },
-        { description: searchRegex },
-        { problem: searchRegex },
-        { solution: searchRegex },
-        { createdBy: searchRegex },
-      ],
-    })
-      .sort({ createdAt: -1 })
-      .populate("comments.user", "name");
+    let ideas;
+
+    // Use Atlas Search when enabled
+    // eslint-disable-next-line no-undef
+    if (process.env.ATLAS_SEARCH_ENABLED === "true") {
+      ideas = await Idea.aggregate([
+        {
+          $search: {
+            index: "idea_search_index",
+            compound: {
+              should: [
+                {
+                  text: {
+                    query: searchTerm,
+                    path: ["title", "description", "tags"],
+                    score: {
+                      boost: { value: 3 },
+                    },
+                  },
+                },
+                {
+                  autocomplete: {
+                    query: searchTerm,
+                    path: "title",
+                    tokenOrder: "sequential",
+                    score: {
+                      boost: { value: 5 },
+                    },
+                  },
+                },
+                {
+                  autocomplete: {
+                    query: searchTerm,
+                    path: ["description", "tags"],
+                    tokenOrder: "sequential",
+                  },
+                },
+              ],
+              minimumShouldMatch: 1,
+            },
+          },
+        },
+        {
+          $limit: 50,
+        },
+        {
+          $addFields: {
+            searchScore: { $meta: "searchScore" },
+          },
+        },
+        {
+          $sort: {
+            searchScore: -1,
+            createdAt: -1,
+          },
+        },
+      ]);
+
+      // Populate comment user information
+      await Idea.populate(ideas, {
+        path: "comments.user",
+        select: "name",
+      });
+    } else {
+      // Local development fallback using regex
+      const searchRegex = new RegExp(
+        searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        "i"
+      );
+
+      ideas = await Idea.find({
+        $or: [
+          { title: searchRegex },
+          { description: searchRegex },
+          { tags: searchRegex },
+        ],
+      })
+        .sort({ createdAt: -1 })
+        .populate("comments.user", "name");
+    }
 
     return res.status(200).json({
       success: true,
@@ -661,6 +727,7 @@ export const searchIdeas = async (req, res) => {
     });
   }
 };
+
 
 // ============================================
 // GET A SINGLE IDEA
